@@ -1,5 +1,7 @@
 from django.db import models
 
+import roman
+
 
 class Region(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -63,6 +65,9 @@ class Planet(models.Model):
     )
 
     number = models.IntegerField(db_index=True)
+
+    def as_roman(self):
+        return roman.toRoman(self.number)
 
 
 class Moon(models.Model):
