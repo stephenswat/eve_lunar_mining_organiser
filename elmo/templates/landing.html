@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Help{% endblock %}
+{% block title %}Home{% endblock %}
 {% block content %}
 
 <header style="background-image: url({% static "img/moonchunk.jpg" %});" class="intro-header" >
@@ -13,18 +13,20 @@
 </header>
 
 <section class="content-section-a">
-
   <div class="container">
     <div class="row">
       <div class="col-lg-5 ml-auto">
-        <h2 class="section-heading">Some Drivel about this App</h2>
-        <p class="lead">It's very cool and all.</p>
+        <h2 class="section-heading">Crowdsourced Moon Analysis</h2>
+        <p class="lead">
+          Harness the collective scanning power of your entire alliance. Using
+          fine-grained permissions you can allow your alliance members to submit
+          results while not necessarily being able to view the scans of others.
+        </p>
       </div>
       <div class="col-lg-5 mr-auto">
-        <img class="img-fluid" src="img/ipad.png" alt="">
+        <img class="img-fluid" src="{% static 'img/analysis.jpg' %}" alt="">
       </div>
     </div>
-
   </div>
 </section>
 
@@ -34,12 +36,15 @@
 
     <div class="row">
       <div class="col-lg-5 mr-auto order-lg-2">
-        <h2 class="section-heading">3D Device Mockups<br>by PSDCovers</h2>
-        <p class="lead">Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop actions by
-          <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to download some of their awesome, free photoshop actions!</p>
+        <h2 class="section-heading">Coordinate Mining Activities</h2>
+        <p class="lead">
+          Keep track of when your next mining fleet will have to be using the
+          moon mining timerboard. Gain insight in the minerals and products you
+          will gain from mining certain moons.
+        </p>
       </div>
       <div class="col-lg-5 ml-auto order-lg-1">
-        <img class="img-fluid" src="img/dog.png" alt="">
+        <img class="img-fluid" src="{% static 'img/mining.png' %}" alt="">
       </div>
     </div>
 
@@ -53,13 +58,16 @@
 
     <div class="row">
       <div class="col-lg-5 ml-auto">
-        <h2 class="section-heading">Google Web Fonts and<br>Font Awesome Icons</h2>
-        <p class="lead">This template features the 'Lato' font, part of the
-          <a target="_blank" href="http://www.google.com/fonts">Google Web Font library</a>, as well as
-          <a target="_blank" href="http://fontawesome.io">icons from Font Awesome</a>.</p>
+        <h2 class="section-heading">It's 100% Open Source</h2>
+        <p class="lead">
+          Since ELMO is under the MIT license you are free to change the source
+          code however you want to fit your needs. You can also host your own
+          instance of ELMO to avoid your precious scanning results from falling
+          in the wrong hands!
+        </p>
       </div>
-      <div class="col-lg-5 mr-auto ">
-        <img class="img-fluid" src="img/phones.png" alt="">
+      <div class="col-lg-5 mr-auto" style="text-align: center;">
+        <img class="img-fluid" src="{% static 'img/open_source.png' %}" alt="" style="max-height: 250px;">
       </div>
     </div>
 
