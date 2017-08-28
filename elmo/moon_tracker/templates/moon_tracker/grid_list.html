@@ -48,7 +48,7 @@ New Eden
               {% elif type == 'constellation' %}
                 <h5 class="card-title"><a href="{% url 'list_system' i.name %}">{{i.name}}</a></h5>
               {% endif %}
-              <p class="card-text">5 / 100 moons scanned</p>
+              <p class="card-text">0 / {{ i.num_moons }} moons scanned</p>
             </div>
           </div>
         </div>
