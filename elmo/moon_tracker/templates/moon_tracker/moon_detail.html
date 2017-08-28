@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ moon.planet.system.name }} {{ moon.planet.as_roman }} - Moon {{ moon.number }}{% endblock %}
+
+{% block content %}
+
+<header class="intro-header short moon">
+  <div class="container">
+    <div class="intro-message">
+      <h2>
+          <a href="{% url 'list_universe' %}">New Eden</a> /
+          <a href="{% url 'list_region' moon.planet.system.constellation.region.name %}">{{ moon.planet.system.constellation.region.name }}</a> /
+          <a href="{% url 'list_constellation' moon.planet.system.constellation.name %}">{{ moon.planet.system.constellation.name }}</a>
+      </h2>
+      <h1>
+        <a href="{% url 'list_system' moon.planet.system.name %}">{{ moon.planet.system.name }}</a> {{ moon.planet.as_roman }} - Moon {{ moon.number }}
+      </h1>
+    </div>
+  </div>
+</header>
+
+<section class="content-section-a">
+  <div class="container">
+    <h1>Moon Information</h1>
+  </div>
+</section>
+
+<section class="content-section-b">
+  <div class="container">
+    <H1>Submit Scan</h1>
+
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" style="width: 25%; height: 50px;"><span>Kaas</span></div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <div class="input-group">
+          <select class="custom-select form-control" id="exampleSelect1">
+            <optgroup label="Standard ores">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </optgroup>
+            <optgroup label="Moon ores">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </optgroup>
+          </select>
+          <input type="number" min="0" max="100" class="form-control" aria-label="Amount (to the nearest dollar)">
+          <span class="input-group-addon">%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

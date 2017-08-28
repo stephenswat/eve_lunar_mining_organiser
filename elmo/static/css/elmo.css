@@ -48,6 +48,10 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, footer {
   background-image: linear-gradient(120deg, #200122, #6f0000);
 }
 
+.intro-header.moon {
+  background-image: linear-gradient(120deg, #556270, #FF6B6B);
+}
+
 .intro-header.short {
     height: 250px;
 }
@@ -180,4 +184,11 @@ p.copyright {
 
 .card {
     margin-bottom: 15px;
+}
+
+.progress-bar span {
+    text-align: center;
+    font-size: 30pt;
+    line-height: 50px; /* <-- this is what you must define */
+    vertical-align: middle;
 }

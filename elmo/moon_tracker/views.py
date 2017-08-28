@@ -70,10 +70,12 @@ def list_system(request, system):
     )
 
 def moon_detail(request, system, planet, moon):
-    print(system, planet, moon)
     moon_obj = get_object_or_404(Moon, number=moon, planet__number=planet, planet__system__name=system)
 
     return render(
         request,
-        'moon_tracker/test.html'
+        'moon_tracker/moon_detail.html',
+        context={
+            'moon': moon_obj
+        }
     )
