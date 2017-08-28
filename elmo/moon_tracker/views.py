@@ -1,13 +1,66 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from eve_sde.models import Moon
 
-# Create your views here.
-def moon_list(request, region=None, constellation=None, system=None, planet=None):
-    pass
+from eve_sde.models import Region, Constellation, SolarSystem, Moon
+
+def list_universe(request):
+    regions = Region.objects.filter(id__lt=11000000)
+
+    return render(
+        request,
+        'moon_tracker/grid_list.html',
+        context={
+            'items': regions,
+            'parent': None,
+            'type': 'universe'
+        }
+    )
+
+def list_region(request, region):
+    region_obj = get_object_or_404(Region, name=region)
+    constellations = Constellation.objects.filter(region=region_obj)
+
+    return render(
+        request,
+        'moon_tracker/grid_list.html',
+        context={
+            'items': constellations,
+            'parent': region_obj,
+            'type': 'region'
+        }
+    )
+
+def list_constellation(request, constellation):
+    constellation_obj = get_object_or_404(Constellation, name=constellation)
+    systems = SolarSystem.objects.filter(constellation=constellation_obj)
+
+    return render(
+        request,
+        'moon_tracker/grid_list.html',
+        context={
+            'items': systems,
+            'parent': constellation_obj,
+            'type': 'constellation'
+        }
+    )
+
+def list_system(request, system):
+    system_obj = get_object_or_404(SolarSystem, name=system)
+
+    return render(
+        request,
+        'moon_tracker/system_list.html',
+        context={
+            'parent': system_obj,
+            'type': 'system'
+        }
+    )
 
 def moon_detail(request, system, planet, moon):
     print(system, planet, moon)
     moon_obj = get_object_or_404(Moon, number=moon, planet__number=planet, planet__system__name=system)
 
-    return str(moon_obj)
+    return render(
+        request,
+        'moon_tracker/test.html'
+    )

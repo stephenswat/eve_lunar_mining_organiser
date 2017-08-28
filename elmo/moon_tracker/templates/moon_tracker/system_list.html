@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ parent.name }}{% endblock %}
+
+{% block content %}
+
+<header class="intro-header short {{ type }}">
+  <div class="container">
+    <div class="intro-message">
+      <h2>
+          <a href="{% url 'list_universe' %}">New Eden</a> /
+          <a href="{% url 'list_region' parent.constellation.region.name %}">{{ parent.constellation.region.name }}</a> /
+          <a href="{% url 'list_constellation' parent.constellation.name %}">{{ parent.constellation.name }}</a>
+      </h2>
+      <h1>
+        {{ parent.name }}
+      </h1>
+    </div>
+  </div>
+</header>
+
+<section class="content-section-a">
+  <div class="container">
+    <div class="card-columns planet-grid" style="column-count: 2;">
+      {% for p in parent.planets.all %}
+        {% if p.moons.count > 0 %}
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Planet {{ p.as_roman }}</h5>
+            </div>
+            <div class="list-group list-group-flush">
+              {% for m in p.moons.all %}
+                <a href="{% url 'moon_detail' parent.name p.number m.number %}" class="list-group-item list-group-item-action">
+                  <div class="row">
+                    <div class="col-11">
+                    Moon {{ m.number }}
+                    </div>
+                    <div class="col-1">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

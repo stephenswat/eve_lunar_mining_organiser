@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+{% if type == 'universe' %}
+New Eden
+{% else %}
+{{ parent.name }}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<header class="intro-header short {{ type }}">
+  <div class="container">
+    <div class="intro-message">
+      <h2>
+        {% if type == 'universe' %}
+        {% elif type == 'region' %}
+          <a href="{% url 'list_universe' %}">New Eden</a>
+        {% elif type == 'constellation' %}
+          <a href="{% url 'list_universe' %}">New Eden</a> /
+          <a href="{% url 'list_region' parent.region.name %}">{{ parent.region.name }}</a>
+        {% endif %}
+      </h2>
+      <h1>
+        {% if type == 'universe' %}
+          New Eden
+        {% else %}
+          {{ parent.name }}
+        {% endif %}
+      </h1>
+    </div>
+  </div>
+</header>
+
+<section class="content-section-a">
+  <div class="container">
+    <div class="row">
+      {% for i in items %}
+        <div class="col-3">
+          <div class="card">
+            <div class="card-body">
+              {% if type == 'universe' %}
+                <h5 class="card-title"><a href="{% url 'list_region' i.name %}">{{i.name}}</a></h5>
+              {% elif type == 'region' %}
+                <h5 class="card-title"><a href="{% url 'list_constellation' i.name %}">{{i.name}}</a></h5>
+              {% elif type == 'constellation' %}
+                <h5 class="card-title"><a href="{% url 'list_system' i.name %}">{{i.name}}</a></h5>
+              {% endif %}
+              <p class="card-text">5 / 100 moons scanned</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
