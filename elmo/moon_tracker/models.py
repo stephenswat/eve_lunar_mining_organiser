@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.forms import Select
 
-from eve_sde.models import Moon, Ore
+from eve_sde.models import Moon
 
 # Create your models here.
 class ScanResult(models.Model):
@@ -17,6 +18,18 @@ class ScanResult(models.Model):
         db_index=True
     )
 
+
+ORE_CHOICES = (
+    ('Standard Ores', (
+        (1, 'PH1'),
+        (2, 'PH2'),
+    )),
+    ('Moon Ores', (
+        (3, 'PH3'),
+        (4, 'PH4'),
+    )),
+)
+
 class ScanResultOre(models.Model):
     scan = models.ForeignKey(
         ScanResult,
@@ -24,9 +37,6 @@ class ScanResultOre(models.Model):
         db_index=True
     )
 
-    ore = models.ForeignKey(
-        Ore,
-        related_name='+'
-    )
+    ore = models.IntegerField(choices=ORE_CHOICES)
 
     percentage = models.PositiveSmallIntegerField()
