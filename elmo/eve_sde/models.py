@@ -80,3 +80,8 @@ class Moon(models.Model):
     )
 
     number = models.IntegerField(db_index=True)
+
+class Ore(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=64)
+    moon_ore = models.BooleanField()
