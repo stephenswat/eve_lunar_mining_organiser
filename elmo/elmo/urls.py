@@ -21,5 +21,5 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='landing.html'), name='landing'),
     url(r'^admin/', admin.site.urls),
     url(r'^moons/', include('moon_tracker.urls')),
-    url('', include('social_django.urls', namespace='social'))
+    url(r'^auth/', include('social_django.urls', namespace='social'))
 ]
