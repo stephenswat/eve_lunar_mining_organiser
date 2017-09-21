@@ -6,6 +6,8 @@
 
 html {
     overflow-y: scroll;
+    position: relative;
+    min-height: 100%;
 }
 
 body, html {
@@ -175,7 +177,6 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, footer {
 
 footer {
   padding: 50px 0;
-  background-color: #f8f8f8;
 }
 
 p.copyright {
