@@ -101,3 +101,4 @@ ENV/
 
 # ELMO specific files
 mapDenormalize.csv
+elmo/elmo/settings/local.py
