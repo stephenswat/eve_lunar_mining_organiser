@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     'eve_sde',
+    'eve_auth',
     'moon_tracker'
 ]
 
