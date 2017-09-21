@@ -49,6 +49,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
+    'eve_auth.pipeline.get_character_id',
     'eve_auth.pipeline.refuse_alliance_id',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.create_user',
@@ -58,6 +59,9 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_EVEONLINE_USER_FIELDS = ('character_id', 'first_name', 'last_name')
+
+AUTH_USER_MODEL = 'eve_auth.EveUser'
 
 ROOT_URLCONF = 'elmo.urls'
 
