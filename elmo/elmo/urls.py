@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.contrib.auth.views import logout
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='landing.html'), name='landing'),
     url(r'^admin/', admin.site.urls),
     url(r'^moons/', include('moon_tracker.urls')),
+    url(r'^auth/logout/$', logout, {'next_page': '/'}, name='logout'),
     url(r'^auth/', include('social_django.urls', namespace='social'))
 ]
