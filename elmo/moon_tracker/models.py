@@ -40,3 +40,6 @@ class ScanResultOre(models.Model):
     ore = models.IntegerField(choices=ORE_CHOICES)
 
     percentage = models.PositiveSmallIntegerField()
+
+    class Meta:
+        default_permissions = ()

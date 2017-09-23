@@ -15,6 +15,9 @@ class Region(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+    default_permissions = ()
+
 
 class Constellation(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -32,6 +35,9 @@ class Constellation(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+    default_permissions = ()
 
 
 class SolarSystem(models.Model):
@@ -54,6 +60,9 @@ class SolarSystem(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+    default_permissions = ()
+
 
 class Planet(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -69,6 +78,9 @@ class Planet(models.Model):
     def as_roman(self):
         return roman.toRoman(self.number)
 
+    class Meta:
+    default_permissions = ()
+
 
 class Moon(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -80,3 +92,6 @@ class Moon(models.Model):
     )
 
     number = models.IntegerField(db_index=True)
+
+    class Meta:
+        default_permissions = ()
