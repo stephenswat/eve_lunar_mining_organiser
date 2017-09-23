@@ -16,7 +16,7 @@ class Region(models.Model):
         return self.name
 
     class Meta:
-    default_permissions = ()
+        default_permissions = ()
 
 
 class Constellation(models.Model):
@@ -37,7 +37,7 @@ class Constellation(models.Model):
         return self.name
 
     class Meta:
-    default_permissions = ()
+        default_permissions = ()
 
 
 class SolarSystem(models.Model):
@@ -61,7 +61,7 @@ class SolarSystem(models.Model):
         return self.name
 
     class Meta:
-    default_permissions = ()
+        default_permissions = ()
 
 
 class Planet(models.Model):
@@ -79,7 +79,7 @@ class Planet(models.Model):
         return roman.toRoman(self.number)
 
     class Meta:
-    default_permissions = ()
+        default_permissions = ()
 
 
 class Moon(models.Model):
