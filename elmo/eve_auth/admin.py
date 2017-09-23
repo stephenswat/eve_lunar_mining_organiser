@@ -13,6 +13,7 @@ class EveUserAdmin(admin.ModelAdmin):
         )}),
         ('Permissions', {'fields': (
             'is_staff',
+            'is_superuser',
             'groups',
             'user_permissions'
         )}),
@@ -22,7 +23,8 @@ class EveUserAdmin(admin.ModelAdmin):
         'character_id',
         'first_name',
         'last_name',
-        'is_staff'
+        'is_staff',
+        'is_superuser',
     )
 
     list_filter = (
