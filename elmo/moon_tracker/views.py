@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Count
 
 from eve_sde.models import Region, Constellation, SolarSystem, Moon
+from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
 
 def list_universe(request):
     regions = (
@@ -82,6 +83,9 @@ def moon_detail(request, system, planet, moon):
         request,
         'moon_tracker/moon_detail.html',
         context={
-            'moon': moon_obj
+            'moon': moon_obj,
+            'can_view': user_can_view_scans(request.user, moon_obj),
+            'can_add': user_can_add_scans(request.user, moon_obj),
+            'can_delete': user_can_delete_scans(request.user, moon_obj),
         }
     )

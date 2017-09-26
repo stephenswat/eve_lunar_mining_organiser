@@ -23,6 +23,13 @@
 <section class="content-section-a">
   <div class="container">
     <h1>Moon Information</h1>
+
+    {% if can_view %}
+    Yay, you can view! But can you also delete? {{ can_delete }}
+    {% else %}
+    <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
+    {% endif %}
+
   </div>
 </section>
 
@@ -30,6 +37,7 @@
   <div class="container">
     <H1>Submit Scan</h1>
 
+    {% if can_add %}
     <div class="progress">
       <div class="progress-bar" role="progressbar" style="width: 25%; height: 50px;"><span>Kaas</span></div>
     </div>
@@ -58,6 +66,10 @@
         </div>
       </div>
     </div>
+    {% else %}
+    <p class="text-muted">Sorry, but you don't have the permissions required to add scan results for this moon.</p>
+    {% endif %}
+
   </div>
 </section>
 
