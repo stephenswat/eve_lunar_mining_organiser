@@ -21,8 +21,22 @@ class ScanResult(models.Model):
 
 ORE_CHOICES = (
     ('Standard Ores', (
-        (1, 'PH1'),
-        (2, 'PH2'),
+        (18, 'Plagioclase'),
+        (19, 'Spodumain'),
+        (20, 'Kernite'),
+        (21, 'Hedbergite'),
+        (22, 'Arkonor'),
+        (1223, 'Bistot'),
+        (1224, 'Pyroxeres'),
+        (1225, 'Crokite'),
+        (1226, 'Jaspet'),
+        (1227, 'Omber'),
+        (1228, 'Scordite'),
+        (1229, 'Gneiss'),
+        (1230, 'Veldspar'),
+        (1231, 'Hemorphite'),
+        (1232, 'Dark Ochre'),
+        (11396, 'Mercoxit'),
     )),
     ('Moon Ores', (
         (3, 'PH3'),
