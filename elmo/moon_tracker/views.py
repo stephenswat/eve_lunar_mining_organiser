@@ -8,6 +8,7 @@ def list_universe(request):
     regions = (
         Region.objects
         .filter(id__lt=11000000)
+        .filter(constellations__systems__security__lt=0.5)
         .annotate(num_moons=Count('constellations__systems__planets__moons'))
         .order_by('name')
     )
@@ -27,6 +28,7 @@ def list_region(request, region):
     constellations = (
         Constellation.objects
         .filter(region=region_obj)
+        .filter(systems__security__lt=0.5)
         .annotate(num_moons=Count('systems__planets__moons'))
         .order_by('name')
     )
@@ -46,6 +48,7 @@ def list_constellation(request, constellation):
     systems = (
         SolarSystem.objects
         .filter(constellation=constellation_obj)
+        .filter(security__lt=0.5)
         .annotate(num_moons=Count('planets__moons'))
         .order_by('name')
     )
