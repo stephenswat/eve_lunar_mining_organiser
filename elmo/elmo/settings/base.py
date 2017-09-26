@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
+    'guardian',
     'eve_sde',
     'eve_auth',
     'moon_tracker'
@@ -42,6 +43,8 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.eveonline.EVEOnlineOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
 ]
 
 SOCIAL_AUTH_PIPELINE = (
