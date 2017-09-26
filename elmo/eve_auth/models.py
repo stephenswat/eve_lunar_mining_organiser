@@ -19,8 +19,8 @@ class EveUserManager(BaseUserManager):
         return user
 
 
-class EveUser(AbstractBaseUser, PermissionsMixin):
-    character_id = models.BigIntegerField(unique=True, db_index=True)
+class EveUser(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
+    character_id = models.BigIntegerField(unique=True, primary_key=True)
 
     is_staff = models.BooleanField(
         'Staff Status',
