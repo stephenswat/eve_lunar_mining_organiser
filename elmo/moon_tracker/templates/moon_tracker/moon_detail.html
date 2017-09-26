@@ -42,34 +42,27 @@
       <div class="progress-bar" role="progressbar" style="width: 25%; height: 50px;"><span>Kaas</span></div>
     </div>
 
-    <div class="row">
-      <div class="col-6">
-        <div class="input-group">
-          <select class="custom-select form-control" id="exampleSelect1">
-            <optgroup label="Standard ores">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </optgroup>
-            <optgroup label="Moon ores">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </optgroup>
-          </select>
-          <input type="number" min="0" max="100" class="form-control" aria-label="Amount (to the nearest dollar)">
-          <span class="input-group-addon">%</span>
+    <form method="post" action="">
+      {% csrf_token %}
+      {{ form.management_form }}
+
+      <div class="row">
+        {% for f in form %}
+        <div class="col-6">
+          <div class="input-group">
+            {{ f.ore }}
+            {{ f.percentage }}
+            <span class="input-group-addon">%</span>
+          </div>
         </div>
+        {% endfor %}
       </div>
-    </div>
     {% else %}
     <p class="text-muted">Sorry, but you don't have the permissions required to add scan results for this moon.</p>
     {% endif %}
 
+      <button type="submit" class="save btn btn-default">Save</button>
+    </form>
   </div>
 </section>
 

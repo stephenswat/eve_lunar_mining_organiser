@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
+from django.forms import inlineformset_factory, NumberInput, Select
 
 from eve_sde.models import Region, Constellation, SolarSystem, Moon
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
+from moon_tracker.models import ScanResult, ScanResultOre
 
 def list_universe(request):
     regions = (
@@ -78,6 +80,16 @@ def list_system(request, system):
 
 def moon_detail(request, system, planet, moon):
     moon_obj = get_object_or_404(Moon, number=moon, planet__number=planet, planet__system__name=system)
+    form = ScanResultOreFormSet = inlineformset_factory(
+        ScanResult,
+        ScanResultOre,
+        fields=('ore', 'percentage'),
+        can_delete=False,
+        widgets={
+            'ore': Select(attrs={'class': 'custom-select form-control'}),
+            'percentage': NumberInput(attrs={'max': 100, 'class': 'form-control'})
+        }
+    )
 
     return render(
         request,
@@ -87,5 +99,6 @@ def moon_detail(request, system, planet, moon):
             'can_view': user_can_view_scans(request.user, moon_obj),
             'can_add': user_can_add_scans(request.user, moon_obj),
             'can_delete': user_can_delete_scans(request.user, moon_obj),
+            'form': form
         }
     )
