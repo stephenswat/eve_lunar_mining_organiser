@@ -187,9 +187,33 @@ p.copyright {
     margin-bottom: 15px;
 }
 
+.ore-entry {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.input-progress-bar {
+    display: flex;
+    width: 100%;
+}
+
+.input-progress-bar :first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-progress-bar :last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.progress-bar {
+    height: 100%;
+}
+
 .progress-bar span {
     text-align: center;
-    font-size: 30pt;
-    line-height: 50px; /* <-- this is what you must define */
+    font-size: 16pt;
+    line-height: 38px; /* <-- this is what you must define */
     vertical-align: middle;
 }

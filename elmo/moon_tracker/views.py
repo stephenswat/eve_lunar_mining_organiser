@@ -86,8 +86,8 @@ def moon_detail(request, system, planet, moon):
         fields=('ore', 'percentage'),
         can_delete=False,
         widgets={
-            'ore': Select(attrs={'class': 'custom-select form-control'}),
-            'percentage': NumberInput(attrs={'max': 100, 'class': 'form-control'})
+            'ore': Select(attrs={'class': 'custom-select form-control ore-type-input'}),
+            'percentage': NumberInput(attrs={'value': 0, 'max': 100, 'class': 'form-control ore-percentage-input'})
         }
     )
 
