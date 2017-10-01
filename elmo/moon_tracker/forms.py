@@ -10,6 +10,10 @@ class BatchMoonScanForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(BatchMoonScanForm, self).clean()
+
+        if 'data' not in cleaned_data:
+            raise forms.ValidationError('Input must not be empty.')
+
         raw = StringIO(cleaned_data['data'])
         reader = csv.reader(raw, delimiter='\t')
 
