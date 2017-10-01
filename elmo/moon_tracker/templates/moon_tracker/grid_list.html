@@ -42,7 +42,7 @@ New Eden
       {% for i in items %}
         <div class="col-xl-3 col-lg-4 col-md-6">
           <div class="card">
-            <div class="card-body">
+            <div class="card-body" style="background: linear-gradient(90deg, #007bff10 {{ i.percentage_scanned }}%, #00000000 {{ i.percentage_scanned }}%);">
               {% if type == 'universe' %}
                 <h5 class="card-title"><a href="{% url 'list_region' i.name %}">{{i.name}}</a></h5>
               {% elif type == 'region' %}
@@ -50,7 +50,7 @@ New Eden
               {% elif type == 'constellation' %}
                 <h5 class="card-title"><a href="{% url 'list_system' i.name %}">{{i.name}}</a></h5>
               {% endif %}
-              <p class="card-text">0 / {{ i.num_moons }} moons scanned</p>
+              <p class="card-text">{{ i.num_scanned }} / {{ i.num_moons }} moons scanned</p>
             </div>
           </div>
         </div>
