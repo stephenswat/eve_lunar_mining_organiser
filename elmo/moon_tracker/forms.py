@@ -25,7 +25,6 @@ class BatchMoonScanForm(forms.Form):
         current_scan = {}
 
         for x in reader:
-            print(x)
             if len(x) == 1:
                 if len(x[0]) == 0:
                     raise forms.ValidationError('Invalid input format.')
@@ -59,5 +58,4 @@ class BatchMoonScanForm(forms.Form):
 
                 current_scan[ore_id] = percentage
 
-        print(res)
         cleaned_data['data'] = res
