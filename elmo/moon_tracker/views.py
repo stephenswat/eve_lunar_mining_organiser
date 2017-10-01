@@ -109,6 +109,18 @@ def batch_submit(request):
         form = BatchMoonScanForm(request.POST)
 
         if form.is_valid():
+            for moon, materials in form.cleaned_data['data'].items():
+                result = ScanResult.objects.create(
+                    moon_id=moon,
+                    owner=request.user
+                )
+
+                for ore, percentage in materials.items():
+                    result.constituents.create(
+                        ore=ore,
+                        percentage=percentage
+                    )
+
             return redirect('/')
     else:
         form = BatchMoonScanForm()
