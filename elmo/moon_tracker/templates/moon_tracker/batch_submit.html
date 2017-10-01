@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Batch submission
+{% endblock %}
+
+{% block content %}
+
+<header class="intro-header short universe">
+  <div class="container">
+    <div class="intro-message">
+      <h1>
+        Batch submission
+      </h1>
+    </div>
+  </div>
+</header>
+
+<section class="content-section-a">
+  <div class="container">
+    <h1>Data input</h1>
+    <form action="" method="post" novalidate>
+      {% csrf_token %}
+      <div class="form-group batch-submit">
+        {{ form.data }}
+        <input type="submit" class="btn btn-primary btn-block" value="Submit" />
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="content-section-b">
+  <div class="container">
+    <h1>How to use</h1>
+  </div>
+</section>
+
+{% endblock %}

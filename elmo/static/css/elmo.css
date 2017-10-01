@@ -226,3 +226,19 @@ p.copyright {
 .nav-item:hover {
     background-color: #00000010;
 }
+
+.batch-submit *:first-child {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.batch-submit *:last-child {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+.monospace {
+    font-family: monospace;
+    tab-size: 16;
+    -moz-tab-size: 16;
+}
