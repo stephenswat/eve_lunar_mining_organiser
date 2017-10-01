@@ -15,29 +15,43 @@ class BatchMoonScanForm(forms.Form):
 
         next(reader)
 
-        res = []
+        res = {}
+        current_moon = 0
+        percentage_sum = 0
+        current_scan = {}
 
         for x in reader:
             print(x)
             if len(x) == 1:
-                assert(len(x[0]) > 0)
+                if len(x[0]) == 0:
+                    raise forms.ValidationError('Invalid input format.')
+
+                if current_moon != 0 and percentage_sum != 100:
+                    raise forms.ValidationError('Sum of percentages must be 100.')
+
+                if len(current_scan) > 0 and current_moon != 0:
+                    res[current_moon] = current_scan
 
                 current_moon = 0
+                percentage_sum = 0
                 current_scan = {}
-                res.append(current_scan)
             else:
-                assert(len(x[0]) == 0)
+                if len(x[0]) != 0:
+                    raise forms.ValidationError('Invalid input format.')
 
                 moon_id = int(x[6])
                 ore_id = int(x[3])
                 percentage = int(round(100 * float(x[2])))
 
+                percentage_sum += percentage
+
                 if current_moon == 0:
                     current_moon = moon_id
-                else:
-                    assert(moon_id == current_moon)
+                elif moon_id != current_moon:
+                    raise forms.ValidationError('Unexpected moon ID.')
 
-                assert(ore_id not in current_scan)
+                if ore_id in current_scan:
+                    raise forms.ValidationError('Unexpected moon ID.')
 
                 current_scan[ore_id] = percentage
 
