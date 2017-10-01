@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 from django.forms import inlineformset_factory, NumberInput, Select
@@ -6,6 +6,7 @@ from django.forms import inlineformset_factory, NumberInput, Select
 from eve_sde.models import Region, Constellation, SolarSystem, Moon
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
 from moon_tracker.models import ScanResult, ScanResultOre
+from moon_tracker.forms import BatchMoonScanForm
 
 def list_universe(request):
     regions = (
@@ -102,3 +103,14 @@ def moon_detail(request, system, planet, moon):
             'form': form
         }
     )
+
+def batch_submit(request):
+    if request.method == 'POST':
+        form = BatchMoonScanForm(request.POST)
+
+        if form.is_valid():
+            return redirect('/')
+    else:
+        form = BatchMoonScanForm()
+
+    return render(request, 'moon_tracker/batch_submit.html', {'form': form})

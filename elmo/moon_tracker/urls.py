@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^system/(?P<system>.+)/$', views.list_system, name='list_system'),
     url(r'^constellation/(?P<constellation>.+)/$', views.list_constellation, name='list_constellation'),
     url(r'^region/(?P<region>.+)/$', views.list_region, name='list_region'),
+    url(r'^submit/$', views.batch_submit, name='batch_submit'),
     url(r'^$', views.list_universe, name='list_universe'),
 ]
