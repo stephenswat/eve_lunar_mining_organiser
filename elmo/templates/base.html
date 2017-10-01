@@ -37,6 +37,9 @@
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
+              <a class="nav-link" href="{% url 'batch_submit' %}">Submit</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="#">{{ user.get_full_name }}</a>
             </li>
             <li class="nav-item">
