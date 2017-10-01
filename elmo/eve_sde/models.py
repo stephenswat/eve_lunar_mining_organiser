@@ -78,6 +78,9 @@ class Planet(models.Model):
     def as_roman(self):
         return roman.toRoman(self.number)
 
+    def __str__(self):
+        return "%s %d" % (str(self.system), self.number)
+
     class Meta:
         default_permissions = ()
 
@@ -92,6 +95,9 @@ class Moon(models.Model):
     )
 
     number = models.IntegerField(db_index=True)
+
+    def __str__(self):
+        return "%s - Moon %d" % (str(self.planet), self.number)
 
     class Meta:
         default_permissions = ()
