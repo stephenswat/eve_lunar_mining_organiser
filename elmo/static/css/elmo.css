@@ -217,3 +217,12 @@ p.copyright {
     line-height: 38px; /* <-- this is what you must define */
     vertical-align: middle;
 }
+
+.nav-item {
+    border-radius: 4px;
+    transition: background-color 100ms linear;
+}
+
+.nav-item:hover {
+    background-color: #00000010;
+}
