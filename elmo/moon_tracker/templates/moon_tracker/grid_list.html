@@ -14,15 +14,17 @@ New Eden
 <header class="intro-header short {{ type }}">
   <div class="container">
     <div class="intro-message">
-      <h2>
         {% if type == 'universe' %}
         {% elif type == 'region' %}
+        <h2>
           <a href="{% url 'list_universe' %}">New Eden</a>
+        </h2>
         {% elif type == 'constellation' %}
+        <h2>
           <a href="{% url 'list_universe' %}">New Eden</a> /
           <a href="{% url 'list_region' parent.region.name %}">{{ parent.region.name }}</a>
+        </h2>
         {% endif %}
-      </h2>
       <h1>
         {% if type == 'universe' %}
           New Eden
