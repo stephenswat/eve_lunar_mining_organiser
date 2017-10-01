@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 from django.forms import inlineformset_factory, NumberInput, Select
+from django.db.models import Case, IntegerField, Sum, When, F, Q
 
 from eve_sde.models import Region, Constellation, SolarSystem, Moon
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
@@ -14,6 +15,8 @@ def list_universe(request):
         .filter(id__lt=11000000)
         .filter(constellations__systems__security__lt=0.5)
         .annotate(num_moons=Count('constellations__systems__planets__moons'))
+        .annotate(num_scanned=Count('constellations__systems__planets__moons__scans__moon', distinct=True))
+        .annotate(percentage_scanned=((100.0 * F('num_scanned')) / F('num_moons')))
         .order_by('name')
     )
 
@@ -34,6 +37,8 @@ def list_region(request, region):
         .filter(region=region_obj)
         .filter(systems__security__lt=0.5)
         .annotate(num_moons=Count('systems__planets__moons'))
+        .annotate(num_scanned=Count('systems__planets__moons__scans__moon', distinct=True))
+        .annotate(percentage_scanned=((100.0 * F('num_scanned')) / F('num_moons')))
         .order_by('name')
     )
 
@@ -54,6 +59,8 @@ def list_constellation(request, constellation):
         .filter(constellation=constellation_obj)
         .filter(security__lt=0.5)
         .annotate(num_moons=Count('planets__moons'))
+        .annotate(num_scanned=Count('planets__moons__scans__moon', distinct=True))
+        .annotate(percentage_scanned=((100.0 * F('num_scanned')) / F('num_moons')))
         .order_by('name')
     )
 
