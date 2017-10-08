@@ -146,7 +146,7 @@ class SolarSystemListView(MoonContainerListView):
 
 
 def list_system(request, system):
-    system_obj = get_object_or_404(SolarSystem, name=system)
+    system_obj = get_object_or_404(SolarSystem.objects.prefetch_related('planets', 'planets__moons'), name=system)
 
     moons = set()
 
@@ -171,6 +171,7 @@ def list_system(request, system):
 
 def moon_detail(request, system, planet, moon):
     moon_obj = get_object_or_404(Moon, number=moon, planet__number=planet, planet__system__name=system)
+
     form = ScanResultOreFormSet = inlineformset_factory(
         ScanResult,
         ScanResultOre,
@@ -182,11 +183,14 @@ def moon_detail(request, system, planet, moon):
         }
     )
 
+    scans = ScanResult.objects.filter(moon=moon_obj)
+
     return render(
         request,
         'moon_tracker/moon_detail.html',
         context={
             'moon': moon_obj,
+            'scans': scans,
             'can_view': user_can_view_scans(request.user, moon_obj),
             'can_add': user_can_add_scans(request.user, moon_obj),
             'can_delete': user_can_delete_scans(request.user, moon_obj),
