@@ -54,7 +54,7 @@
         <div class="col-6 ore-entry">
           <div class="input-group">
             {{ f.ore }}
-            {{ f.percentage }}
+            {{ f.quantity }}
             <span class="input-group-addon">%</span>
           </div>
         </div>
@@ -87,7 +87,7 @@ function lel() {
   }
 
   var bar = $("#" + progress_bar_id);
-  var percentage = $('#id_constituents-' + ore_id + '-percentage').val();
+  var percentage = $('#id_constituents-' + ore_id + '-quantity').val();
 
   bar.css('width', percentage + '%');
   bar.text($('#id_constituents-' + ore_id + '-ore option:selected').text());
@@ -95,15 +95,15 @@ function lel() {
   var total = 0;
 
   for (i = 0; i < $("#id_constituents-TOTAL_FORMS").val(); i++) {
-    total += parseInt($('#id_constituents-' + i + '-percentage').val());
+    total += parseInt($('#id_constituents-' + i + '-quantity').val());
   }
 
   for (i = 0; i < $("#id_constituents-TOTAL_FORMS").val(); i++) {
-    $('#id_constituents-' + i + '-percentage').attr(
+    $('#id_constituents-' + i + '-quantity').attr(
       'max',
       Math.min(
         100,
-        parseInt($('#id_constituents-' + i + '-percentage').val()) + 100-total
+        parseInt($('#id_constituents-' + i + '-quantity').val()) + 100-total
       )
     );
   }
