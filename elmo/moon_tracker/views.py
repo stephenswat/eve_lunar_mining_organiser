@@ -1,86 +1,120 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from django.db.models import Count
+from django.db.models import Count, OuterRef, Subquery
+from django.views.generic.list import ListView
 from django.forms import inlineformset_factory, NumberInput, Select
+from django.db.models.functions import Coalesce
 from django.db.models import Case, IntegerField, Sum, When, F, Q
+from django.conf import settings
 
-from eve_sde.models import Region, Constellation, SolarSystem, Moon
+from eve_sde.models import Region, Constellation, SolarSystem, Moon, Planet
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
 from moon_tracker.models import ScanResult, ScanResultOre
 from moon_tracker.forms import BatchMoonScanForm
 
-def list_universe(request):
-    regions = (
-        Region.objects
-        .filter(id__lt=11000000)
-        .filter(constellations__systems__security__lt=0.5)
-        .annotate(num_moons=Count('constellations__systems__planets__moons'))
-        .annotate(num_scanned=Count('constellations__systems__planets__moons__scans__moon', distinct=True))
-        .annotate(percentage_scanned=((100.0 * F('num_scanned')) / F('num_moons')))
-        .order_by('name')
-    )
+class MoonContainerListView(ListView):
+    template_name = 'moon_tracker/grid_list.html'
 
-    return render(
-        request,
-        'moon_tracker/grid_list.html',
-        context={
-            'items': regions,
-            'parent': None,
-            'type': 'universe'
-        }
-    )
+    def get_context_data(self, **kwargs):
+        context = super(MoonContainerListView, self).get_context_data(**kwargs)
+        context['parent'] = self.get_parent()
+        context['type'] = self.container_type
+        return context
 
-def list_region(request, region):
-    region_obj = get_object_or_404(Region, name=region)
-    constellations = (
-        Constellation.objects
-        .filter(region=region_obj)
-        .filter(systems__security__lt=0.5)
-        .annotate(num_moons=Count('systems__planets__moons'))
-        .annotate(num_scanned=Count('systems__planets__moons__scans__moon', distinct=True))
-        .annotate(percentage_scanned=((100.0 * F('num_scanned')) / F('num_moons')))
-        .order_by('name')
-    )
+    def get_parent(self):
+        return None
 
-    return render(
-        request,
-        'moon_tracker/grid_list.html',
-        context={
-            'items': constellations,
-            'parent': region_obj,
-            'type': 'region'
-        }
-    )
+    def get_queryset(self):
+        moons = (
+            Moon.objects
+            .annotate(scan_count=Count('scans'))
+            .filter(scan_count__gte=settings.MOON_TRACKER_MINIMUM_SCANS)
+            .values('id')
+        )
 
-def list_constellation(request, constellation):
-    constellation_obj = get_object_or_404(Constellation, name=constellation)
-    systems = (
-        SolarSystem.objects
-        .filter(constellation=constellation_obj)
-        .filter(security__lt=0.5)
-        .annotate(num_moons=Count('planets__moons'))
-        .annotate(num_scanned=Count('planets__moons__scans__moon', distinct=True))
-        .annotate(percentage_scanned=((100.0 * F('num_scanned')) / F('num_moons')))
-        .order_by('name')
-    )
+        relevant_moons = (
+            Moon.objects
+            .filter(**{
+                self.id_accessor: OuterRef('id')
+            })
+            .filter(id__in=moons)
+            .values(self.id_accessor)
+            .annotate(count=Count('*'))
+            .values('count')
+        )
 
-    return render(
-        request,
-        'moon_tracker/grid_list.html',
-        context={
-            'items': systems,
-            'parent': constellation_obj,
-            'type': 'constellation'
-        }
-    )
+        entity_scanned_count = (
+            self.model.objects
+            .annotate(num_scanned=Coalesce(Subquery(relevant_moons), 0))
+        )
+
+        entity_scanned_map = {x.id: x.num_scanned for x in entity_scanned_count}
+
+        entities = (
+            self.get_entities()
+            .filter(**{self.system_accessor + 'security__lt': 0.5})
+            .annotate(num_moons=Count(self.system_accessor + 'planets__moons'))
+        )
+
+        for r in entities:
+            r.num_scanned = entity_scanned_map[r.id]
+            r.fraction_scanned = float(r.num_scanned) / r.num_moons
+
+        return sorted(list(entities), key=lambda r: (-r.fraction_scanned, r.name))
+
+
+class RegionListView(MoonContainerListView):
+    model = Region
+    container_type = 'universe'
+    id_accessor = 'planet__system__constellation__region__id'
+    system_accessor = 'constellations__systems__'
+
+    def get_entities(self):
+        return self.model.objects.filter(id__lt=11000000)
+
+
+class ConstellationListView(MoonContainerListView):
+    model = Constellation
+    container_type = 'region'
+    id_accessor = 'planet__system__constellation__id'
+    system_accessor = 'systems__'
+
+    def get_entities(self):
+        return self.model.objects.filter(region=self.get_parent())
+
+    def get_parent(self):
+        return get_object_or_404(Region, name=self.kwargs['region'])
+
+
+class SolarSystemListView(MoonContainerListView):
+    model = SolarSystem
+    container_type = 'constellation'
+    id_accessor = 'planet__system__id'
+    system_accessor = ''
+
+    def get_entities(self):
+        return self.model.objects.filter(constellation=self.get_parent())
+
+    def get_parent(self):
+        return get_object_or_404(Constellation, name=self.kwargs['constellation'])
+
 
 def list_system(request, system):
     system_obj = get_object_or_404(SolarSystem, name=system)
+
+    moons = list(zip(*list((
+        Moon.objects
+        .filter(planet__system=system_obj)
+        .annotate(scan_count=Count('scans'))
+        .filter(scan_count__gte=settings.MOON_TRACKER_MINIMUM_SCANS)
+        .values_list('id')
+    ))))[0]
 
     return render(
         request,
         'moon_tracker/system_list.html',
         context={
+            'valid_moons': moons,
             'parent': system_obj,
             'type': 'system'
         }

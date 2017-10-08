@@ -15,6 +15,8 @@ SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 # None if all alliances can access this app, otherwise a list of ID's.
 VALID_ALLIANCE_IDS = None
 
+MOON_TRACKER_MINIMUM_SCANS = 1
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
