@@ -15,6 +15,29 @@ from moon_tracker.forms import BatchMoonScanForm
 class MoonContainerListView(ListView):
     template_name = 'moon_tracker/grid_list.html'
 
+    sql_query = '''
+        SELECT {t}.id, {t}.name, COUNT(*) as num_scanned
+        FROM (
+            SELECT * FROM (
+                SELECT moon_id AS id, COUNT(*) AS count
+                FROM moon_tracker_scanresult
+                GROUP BY moon_id
+            ) AS moons
+            INNER JOIN eve_sde_moon m
+            ON (m.id = moons.id)
+            WHERE moons.count >= {min}
+        ) m
+        INNER JOIN "eve_sde_planet" p
+        ON (m."planet_id" = p."id")
+        INNER JOIN "eve_sde_solarsystem" s
+        ON (p."system_id" = s."id")
+        INNER JOIN "eve_sde_constellation" c
+        ON (s."constellation_id" = c."id")
+        INNER JOIN "eve_sde_region" r
+        ON (c."region_id" = r."id")
+        GROUP BY {t}.id
+    '''
+
     def get_context_data(self, **kwargs):
         context = super(MoonContainerListView, self).get_context_data(**kwargs)
         context['parent'] = self.get_parent()
@@ -25,28 +48,14 @@ class MoonContainerListView(ListView):
         return None
 
     def get_queryset(self):
-        moons = (
-            Moon.objects
-            .annotate(scan_count=Count('scans'))
-            .filter(scan_count__gte=settings.MOON_TRACKER_MINIMUM_SCANS)
-            .values('id')
-        )
-
-        relevant_moons = (
-            Moon.objects
-            .filter(**{
-                self.id_accessor: OuterRef('id')
-            })
-            .filter(id__in=moons)
-            .values(self.id_accessor)
-            .annotate(count=Count('*'))
-            .values('count')
-        )
-
         entity_scanned_count = (
-            self.model.objects
-            .annotate(num_scanned=Coalesce(Subquery(relevant_moons), 0))
+            self.model.objects.raw(self.sql_query.format(
+                t=self.table_shorthand,
+                min=settings.MOON_TRACKER_MINIMUM_SCANS
+            ))
         )
+
+        print(entity_scanned_count)
 
         entity_scanned_map = {x.id: x.num_scanned for x in entity_scanned_count}
 
@@ -57,7 +66,7 @@ class MoonContainerListView(ListView):
         )
 
         for r in entities:
-            r.num_scanned = entity_scanned_map[r.id]
+            r.num_scanned = entity_scanned_map.get(r.id, 0)
             r.fraction_scanned = float(r.num_scanned) / r.num_moons
 
         return sorted(list(entities), key=lambda r: (-r.fraction_scanned, r.name))
@@ -65,6 +74,7 @@ class MoonContainerListView(ListView):
 
 class RegionListView(MoonContainerListView):
     model = Region
+    table_shorthand = 'r'
     container_type = 'universe'
     id_accessor = 'planet__system__constellation__region__id'
     system_accessor = 'constellations__systems__'
@@ -75,6 +85,7 @@ class RegionListView(MoonContainerListView):
 
 class ConstellationListView(MoonContainerListView):
     model = Constellation
+    table_shorthand = 'c'
     container_type = 'region'
     id_accessor = 'planet__system__constellation__id'
     system_accessor = 'systems__'
@@ -88,6 +99,7 @@ class ConstellationListView(MoonContainerListView):
 
 class SolarSystemListView(MoonContainerListView):
     model = SolarSystem
+    table_shorthand = 's'
     container_type = 'constellation'
     id_accessor = 'planet__system__id'
     system_accessor = ''
