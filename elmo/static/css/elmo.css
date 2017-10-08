@@ -245,6 +245,7 @@ p.copyright {
 
 .monospace {
     font-family: monospace;
-    tab-size: 16;
-    -moz-tab-size: 16;
+    font-size: 8pt;
+    tab-size: 24;
+    -moz-tab-size: 24;
 }
