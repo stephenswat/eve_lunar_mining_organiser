@@ -25,7 +25,15 @@
     <h1>Moon Information</h1>
 
     {% if can_view %}
-    Yay, you can view! But can you also delete? {{ can_delete }}
+    {% for scan in scans %}
+    <div class="progress result-progress-bar" style="width: 100%;">
+      {% for ore in scan.constituents.all %}
+      <div class="progress-bar ore-{{ ore.ore }}" role="progressbar" style="width: {% widthratio ore.quantity 1 100 %}%">
+        {{ ore.get_ore_display }} ({% widthratio ore.quantity 1 100 %}%)
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
     {% else %}
     <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
     {% endif %}

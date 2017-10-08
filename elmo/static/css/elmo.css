@@ -249,3 +249,83 @@ p.copyright {
     tab-size: 24;
     -moz-tab-size: 24;
 }
+
+.result-progress-bar {
+    height: 25px;
+}
+
+.ore-45490, .ore-45491, .ore-45492, .ore-45493 {
+    background-color: #7a715d;
+}
+
+.ore-45494, .ore-45495, .ore-45496, .ore-45497 {
+    background-color: #557428;
+}
+
+.ore-45498, .ore-45499, .ore-45500, .ore-45501 {
+    background-color: #835632;
+}
+
+/* Missing rare and exceptional! */
+
+.ore-46675 {
+    background-color: #3e4d55;
+}
+
+.ore-46676 {
+    background-color: #39743d;
+}
+
+.ore-46677 {
+    background-color: #a58524;
+}
+
+.ore-46678 {
+    background-color: #9e342c;
+}
+
+.ore-46679 {
+    background-color: #82936f;
+}
+
+.ore-46680 {
+    /* XXX: Missing Hedbergite */
+    background-color: #82936f;
+}
+
+.ore-46681 {
+    background-color: #313d7a;
+}
+
+.ore-46682 {
+    background-color: #6b6b6b;
+}
+
+.ore-46683 {
+    background-color: #9d714f;
+}
+
+.ore-46684 {
+    background-color: #7f4489;
+}
+
+.ore-46685 {
+    background-color: #464647;
+}
+
+.ore-46686 {
+    background-color: #6b8532;
+}
+
+.ore-46687 {
+    background-color: #44322d;
+}
+
+.ore-46688 {
+    background-color: #0c655d;
+}
+
+.ore-46689 {
+    /* XXX: Missing Veldspar */
+    background-color: #0c655d;
+}
