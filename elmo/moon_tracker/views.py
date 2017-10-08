@@ -91,11 +91,11 @@ def moon_detail(request, system, planet, moon):
     form = ScanResultOreFormSet = inlineformset_factory(
         ScanResult,
         ScanResultOre,
-        fields=('ore', 'percentage'),
+        fields=('ore', 'quantity'),
         can_delete=False,
         widgets={
             'ore': Select(attrs={'class': 'custom-select form-control ore-type-input'}),
-            'percentage': NumberInput(attrs={'value': 0, 'max': 100, 'class': 'form-control ore-percentage-input'})
+            'quantity': NumberInput(attrs={'value': 0, 'max': 100, 'class': 'form-control ore-percentage-input'})
         }
     )
 
@@ -122,10 +122,10 @@ def batch_submit(request):
                     owner=request.user
                 )
 
-                for ore, percentage in materials.items():
+                for ore, quantity in materials.items():
                     result.constituents.create(
                         ore=ore,
-                        percentage=percentage
+                        quantity=quantity
                     )
 
             return redirect('/')
