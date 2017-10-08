@@ -148,13 +148,16 @@ class SolarSystemListView(MoonContainerListView):
 def list_system(request, system):
     system_obj = get_object_or_404(SolarSystem, name=system)
 
-    moons = list(zip(*list((
+    moons = set()
+
+    for p in (
         Moon.objects
         .filter(planet__system=system_obj)
         .annotate(scan_count=Count('scans'))
         .filter(scan_count__gte=settings.MOON_TRACKER_MINIMUM_SCANS)
         .values_list('id')
-    ))))[0]
+    ):
+        moons.add(p[0])
 
     return render(
         request,
