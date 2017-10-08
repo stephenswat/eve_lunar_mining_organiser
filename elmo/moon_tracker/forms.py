@@ -1,6 +1,7 @@
 from django import forms
 
 import csv
+import math
 from io import StringIO
 
 class BatchMoonScanForm(forms.Form):
@@ -21,7 +22,7 @@ class BatchMoonScanForm(forms.Form):
 
         res = {}
         current_moon = 0
-        percentage_sum = 0
+        quantity_sum = 0.0
         current_scan = {}
 
         for x in reader:
@@ -29,14 +30,14 @@ class BatchMoonScanForm(forms.Form):
                 if len(x[0]) == 0:
                     raise forms.ValidationError('Invalid input format.')
 
-                if current_moon != 0 and percentage_sum != 100:
-                    raise forms.ValidationError('Sum of percentages must be 100.')
+                if current_moon != 0 and not math.isclose(quantity_sum, 1.0, abs_tol=0.001):
+                    raise forms.ValidationError('Sum of quantities must be 1.0.')
 
                 if len(current_scan) > 0 and current_moon != 0:
                     res[current_moon] = current_scan
 
                 current_moon = 0
-                percentage_sum = 0
+                quantity_sum = 0.0
                 current_scan = {}
             else:
                 if len(x[0]) != 0:
@@ -44,9 +45,9 @@ class BatchMoonScanForm(forms.Form):
 
                 moon_id = int(x[6])
                 ore_id = int(x[3])
-                percentage = int(round(100 * float(x[2])))
+                quantity = float(x[2])
 
-                percentage_sum += percentage
+                quantity_sum += quantity
 
                 if current_moon == 0:
                     current_moon = moon_id
@@ -56,6 +57,7 @@ class BatchMoonScanForm(forms.Form):
                 if ore_id in current_scan:
                     raise forms.ValidationError('Unexpected moon ID.')
 
-                current_scan[ore_id] = percentage
+                current_scan[ore_id] = quantity
 
+        print(res)
         cleaned_data['data'] = res
