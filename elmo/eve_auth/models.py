@@ -50,3 +50,7 @@ class EveUser(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
 
     def __str__(self):
         return self.get_full_name()
+
+
+def get_anonymous_user_instance(_):
+    return EveUser(character_id=0, first_name='Anonymous', last_name='User')

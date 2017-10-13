@@ -64,6 +64,8 @@ SOCIAL_AUTH_PIPELINE = (
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_EVEONLINE_USER_FIELDS = ('character_id', 'first_name', 'last_name')
 
+GUARDIAN_GET_INIT_ANONYMOUS_USER = 'eve_auth.models.get_anonymous_user_instance'
+
 ANONYMOUS_DEFAULT_USERNAME_VALUE = 0
 
 AUTH_USER_MODEL = 'eve_auth.EveUser'
