@@ -54,6 +54,14 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, footer {
   background-image: linear-gradient(120deg, #556270, #FF6B6B);
 }
 
+.intro-header.profile {
+  background-image: linear-gradient(120deg, #003973, #e5e5e5);
+}
+
+.intro-header.submit {
+  background-image: linear-gradient(120deg, #AA076B, #61045F);
+}
+
 .intro-header.short {
     height: 250px;
 }
