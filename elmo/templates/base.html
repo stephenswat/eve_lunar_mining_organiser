@@ -35,6 +35,9 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'list_universe' %}">Moons</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Search</a>
+            </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'batch_submit' %}">Submit</a>
