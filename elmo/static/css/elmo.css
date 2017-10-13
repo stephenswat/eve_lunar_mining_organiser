@@ -24,7 +24,7 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, footer {
 }
 
 .intro-header {
-  padding-top: 50px;
+  margin-top: 56px;
   text-align: center;
   color: #f8f8f8;
   background-size: cover;
