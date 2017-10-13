@@ -66,6 +66,12 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, footer {
     height: 250px;
 }
 
+@media(max-width:767px) {
+    .intro-header.short {
+        height: 150px;
+    }
+}
+
 .intro-message {
   position: relative;
   text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
@@ -91,11 +97,11 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, footer {
 }
 
 @media(max-width:767px) {
-  .intro-message {
-    padding-bottom: 15%;
-  }
   .intro-message>h1 {
     font-size: 3em;
+  }
+  .intro-message>h2 {
+    font-size: 1.5em;
   }
   ul.intro-social-buttons>li {
     display: block;
@@ -108,6 +114,12 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, footer {
   .intro-divider {
     width: 100%;
   }
+}
+
+@media(max-width:520px) {
+    .intro-message>h2 {
+        display: none;
+    }
 }
 
 .network-name {
