@@ -231,13 +231,6 @@ p.copyright {
     height: 100%;
 }
 
-.progress-bar span {
-    text-align: center;
-    font-size: 16pt;
-    line-height: 38px; /* <-- this is what you must define */
-    vertical-align: middle;
-}
-
 .nav-item {
     border-radius: 4px;
     transition: background-color 100ms linear;
@@ -348,4 +341,11 @@ p.copyright {
 .ore-46689 {
     /* XXX: Missing Veldspar */
     background-color: #0c655d;
+}
+
+.result-progress-bar .progress-bar >span {
+    display: block;
+    margin-top: 5px;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+    font-size: 14pt;
 }
