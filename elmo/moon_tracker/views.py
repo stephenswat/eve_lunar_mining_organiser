@@ -29,8 +29,6 @@ class MoonContainerListView(ListView):
             self.model.objects.raw(self.sql_query, [settings.MOON_TRACKER_MINIMUM_SCANS])
         )
 
-        print(entity_scanned_count)
-
         entity_scanned_map = {x.id: x.num_scanned for x in entity_scanned_count}
 
         entities = (
