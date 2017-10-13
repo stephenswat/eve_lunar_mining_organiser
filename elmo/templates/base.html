@@ -43,7 +43,7 @@
               <a class="nav-link" href="{% url 'batch_submit' %}">Submit</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">{{ user.get_full_name }}</a>
+              <a class="nav-link" href="{% url 'profile' %}">{{ user.get_full_name }}</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">Log out <i class="fa fa-sign-out" aria-hidden="true"></i></a>

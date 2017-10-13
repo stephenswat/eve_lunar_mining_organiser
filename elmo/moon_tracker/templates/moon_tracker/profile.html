@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+{{ user.get_full_name }}
+{% endblock %}
+
+{% block content %}
+
+<header class="intro-header short profile">
+  <div class="container">
+    <div class="intro-message">
+      <h1>
+        {{ user.get_full_name }}
+      </h1>
+    </div>
+  </div>
+</header>
+
+<section class="content-section-a">
+  <div class="container">
+    {{ user.get_full_name }} has scanned {{ scans.count }} moons.
+  </div>
+</section>
+
+{% endblock %}

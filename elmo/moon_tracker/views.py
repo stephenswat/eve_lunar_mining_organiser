@@ -7,6 +7,7 @@ from django.db.models.functions import Coalesce
 from django.db.models import Case, IntegerField, Sum, When, F, Q
 from django.conf import settings
 
+from eve_auth.models import EveUser
 from eve_sde.models import Region, Constellation, SolarSystem, Moon, Planet
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
 from moon_tracker.models import ScanResult, ScanResultOre
@@ -218,3 +219,18 @@ def batch_submit(request):
         form = BatchMoonScanForm()
 
     return render(request, 'moon_tracker/batch_submit.html', {'form': form})
+
+def profile(request, uid=None):
+    if uid is not None:
+        user = get_object_or_404(EveUser, character_id=uid)
+    else:
+        user = request.user
+
+    return render(
+        request,
+        'moon_tracker/profile.html',
+        context={
+            'user': user,
+            'scans': ScanResult.objects.filter(owner=user)
+        }
+    )
