@@ -18,6 +18,9 @@ class ScanResult(models.Model):
         db_index=True
     )
 
+    class Meta:
+        unique_together = (("owner", "moon"),)
+
 
 ORE_CHOICES = (
     ('Standard Ores', (
