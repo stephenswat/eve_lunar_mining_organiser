@@ -4,9 +4,10 @@ import csv
 import math
 from io import StringIO
 
+
 class BatchMoonScanForm(forms.Form):
     data = forms.CharField(
-        widget=forms.Textarea(attrs={'class':'form-control monospace'}),
+        widget=forms.Textarea(attrs={'class': 'form-control monospace'}),
     )
 
     def clean(self):

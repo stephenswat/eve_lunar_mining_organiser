@@ -37,4 +37,5 @@ class ScanResultAdmin(admin.ModelAdmin):
         'moon',
     )
 
+
 admin.site.register(ScanResult, ScanResultAdmin)

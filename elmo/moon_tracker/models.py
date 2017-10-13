@@ -1,10 +1,9 @@
 from django.db import models
 from django.conf import settings
-from django.forms import Select
 
 from eve_sde.models import Moon
 
-# Create your models here.
+
 class ScanResult(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -67,6 +66,7 @@ ORE_CHOICES = (
         (45513, 'Ytterbite'),
     )),
 )
+
 
 class ScanResultOre(models.Model):
     scan = models.ForeignKey(

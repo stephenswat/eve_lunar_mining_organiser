@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 from guardian.mixins import GuardianUserMixin
 
+
 class EveUserManager(BaseUserManager):
     use_in_migrations = True
 

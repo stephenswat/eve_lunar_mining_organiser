@@ -1,17 +1,16 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from django.db.models import Count, OuterRef, Subquery
+from django.db.models import Count
 from django.views.generic.list import ListView
 from django.forms import inlineformset_factory, NumberInput, Select
-from django.db.models.functions import Coalesce
-from django.db.models import Case, IntegerField, Sum, When, F, Q
 from django.conf import settings
 
 from eve_auth.models import EveUser
-from eve_sde.models import Region, Constellation, SolarSystem, Moon, Planet
+from eve_sde.models import Region, Constellation, SolarSystem, Moon
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
 from moon_tracker.models import ScanResult, ScanResultOre
 from moon_tracker.forms import BatchMoonScanForm
+
 
 class MoonContainerListView(ListView):
     template_name = 'moon_tracker/grid_list.html'
@@ -168,6 +167,7 @@ def list_system(request, system):
         }
     )
 
+
 def moon_detail(request, system, planet, moon):
     moon_obj = get_object_or_404(Moon, number=moon, planet__number=planet, planet__system__name=system)
 
@@ -197,6 +197,7 @@ def moon_detail(request, system, planet, moon):
         }
     )
 
+
 def batch_submit(request):
     if request.method == 'POST':
         form = BatchMoonScanForm(request.POST)
@@ -219,6 +220,7 @@ def batch_submit(request):
         form = BatchMoonScanForm()
 
     return render(request, 'moon_tracker/batch_submit.html', {'form': form})
+
 
 def profile(request, uid=None):
     if uid is not None:
