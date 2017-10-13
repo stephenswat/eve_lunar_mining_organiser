@@ -28,8 +28,8 @@
     {% for scan in scans %}
     <div class="progress result-progress-bar" style="width: 100%;">
       {% for ore in scan.constituents.all %}
-      <div class="progress-bar ore-{{ ore.ore }}" role="progressbar" style="width: {% widthratio ore.quantity 1 100 %}%">
-        {{ ore.get_ore_display }} ({% widthratio ore.quantity 1 100 %}%)
+      <div class="progress-bar ore-{{ ore.ore }}" role="progressbar" style="width: {{ ore.get_percentage }}%">
+        {{ ore.get_ore_display }} ({{ ore.get_percentage | floatformat }}%)
       </div>
       {% endfor %}
     </div>

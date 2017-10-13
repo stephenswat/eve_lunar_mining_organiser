@@ -76,5 +76,8 @@ class ScanResultOre(models.Model):
 
     quantity = models.FloatField()
 
+    def get_percentage(self):
+        return self.quantity * 100
+
     class Meta:
         default_permissions = ()
