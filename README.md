@@ -19,8 +19,10 @@ Install the required packages:
 
 Create and populate the database:
 
+    python manage.py makemigrations
     python manage.py migrate
     python manage.py loaddata eve_sde/fixtures/eve_sde_map.json
     python manage.py create_permissions
+    python manage.py create_groups
 
 That should be all!
