@@ -6,7 +6,9 @@ from django.forms import inlineformset_factory, NumberInput, Select
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from django.db import IntegrityError
 
+from collections import defaultdict
 from guardian.shortcuts import get_objects_for_user
 
 from eve_auth.models import EveUser
@@ -207,11 +209,27 @@ def batch_submit(request):
         form = BatchMoonScanForm(request.POST)
 
         if form.is_valid():
-            for moon, materials in form.cleaned_data['data'].items():
-                result = ScanResult.objects.create(
-                    moon_id=moon,
-                    owner=request.user
-                )
+            statuses = defaultdict(int)
+
+            for moon_id, materials in form.cleaned_data['data'].items():
+                try:
+                    moon = Moon.objects.get(id=moon_id)
+                except Moon.DoesNotExist:
+                    statuses['error_no_moon'] += 1
+                    continue
+
+                if not user_can_add_scans(request.user, moon):
+                    statuses['error_no_permissions'] += 1
+                    continue
+
+                try:
+                    result = ScanResult.objects.create(
+                        moon=moon,
+                        owner=request.user
+                    )
+                except IntegrityError:
+                    statuses['error_exists_already'] += 1
+                    continue
 
                 for ore, quantity in materials.items():
                     result.constituents.create(
@@ -219,6 +237,17 @@ def batch_submit(request):
                         quantity=quantity
                     )
 
+                    statuses['success'] += 1
+
+            for status, count in statuses.items():
+                if status == 'error_no_moon':
+                    messages.error(request, '%d moon scan(s) could not be submitted as the moon did not exist.' % count)
+                elif status == 'error_no_permissions':
+                    messages.error(request, '%d moon scan(s) could not be submitted as you lack the required permissions.' % count)
+                elif status == 'error_exists_already':
+                    messages.error(request, '%d moon scan(s) could not be submitted as you have already scanned the moon.' % count)
+                elif status == 'success':
+                    messages.success(request, '%d moon scan(s) were successfully submitted.' % count)
             return redirect('/')
     else:
         form = BatchMoonScanForm()
