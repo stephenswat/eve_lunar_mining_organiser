@@ -3,7 +3,7 @@
 
 {% block title %}{{ moon.planet.system.name }} {{ moon.planet.as_roman }} - Moon {{ moon.number }}{% endblock %}
 
-{% block content %}
+{% block header %}
 
 <header class="intro-header short moon">
   <div class="container">
@@ -19,6 +19,10 @@
     </div>
   </div>
 </header>
+
+{% endblock %}
+
+{% block content %}
 
 <section class="content-section-a">
   <div class="container">

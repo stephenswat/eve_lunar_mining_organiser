@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 from django.forms import inlineformset_factory, NumberInput, Select
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 
 from eve_auth.models import EveUser
 from eve_sde.models import Region, Constellation, SolarSystem, Moon

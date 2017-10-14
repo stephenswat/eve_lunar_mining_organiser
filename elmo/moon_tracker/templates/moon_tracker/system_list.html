@@ -3,7 +3,7 @@
 
 {% block title %}{{ parent.name }}{% endblock %}
 
-{% block content %}
+{% block header %}
 
 <header class="intro-header short {{ type }}">
   <div class="container">
@@ -19,6 +19,10 @@
     </div>
   </div>
 </header>
+
+{% endblock %}
+
+{% block content %}
 
 <section class="content-section-a">
   <div class="container">

@@ -58,6 +58,21 @@
       </div>
     </nav>
 
+    <div class="nav-padding">
+    </div>
+
+    {% block header %}{% endblock %}
+
+    {% if messages %}
+    <section class="content-section-a">
+      <div class="container">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
     {% block content %}{% endblock %}
 
     <!-- Footer -->

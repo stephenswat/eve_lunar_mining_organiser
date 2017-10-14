@@ -24,7 +24,6 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, footer {
 }
 
 .intro-header {
-  margin-top: 56px;
   text-align: center;
   color: #f8f8f8;
   background-size: cover;
@@ -32,6 +31,10 @@ h1, h2, h3, h4, h5, h6, .navbar-brand, footer {
   flex-direction: column;
   justify-content: center;
   height: 500px;
+}
+
+.nav-padding {
+    height: 56px;
 }
 
 .intro-header.universe {
