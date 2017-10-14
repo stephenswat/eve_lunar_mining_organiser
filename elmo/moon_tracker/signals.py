@@ -7,5 +7,5 @@ from eve_auth.models import EveUser
 
 @receiver(post_save, sender=EveUser)
 def my_handler(sender, **kwargs):
-    if sender.character_id != 0 and kwargs['created']:
+    if kwargs['instance'].character_id != 0 and kwargs['created']:
         Group.objects.get(name='default').user_set.add(kwargs['instance'])
