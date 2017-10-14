@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load pagination_tools %}
+{% load scan_result_tags %}
 
 {% block title %}
 Leaderboard
@@ -22,14 +23,48 @@ Leaderboard
 
 <section class="content-section-a">
   <div class="container">
-    <h1>Thing</h1>
+    <h1>Top Contributors</h1>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="20%">Rank</th>
+          <th width="40%">User</th>
+          <th width="40%">Scans</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in users %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><img src="https://image.eveonline.com/Character/{{ r.character_id }}_32.jpg" /> <a href="{% url 'profile' r.character_id %}">{{ r.get_full_name }}</a></td>
+            <td>{{ r.count }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </section>
 
 <section class="content-section-b">
   <div class="container">
-    <h1>Thing</h1>
-
+    <h1>Ore Statistics</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="50%">Ore</th>
+          <th width="50%">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in ores %}
+          <tr>
+            <td><img src="https://image.eveonline.com/Type/{{ r.ore }}_32.png" /> {{ r.ore | ore_id_to_name }}</td>
+            <td>{{ r.quantity | floatformat:2 }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </section>
 

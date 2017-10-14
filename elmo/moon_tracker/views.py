@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from django.db.models import Count, Q
+from django.db.models import Count, Sum, Q
 from django.views.generic.list import ListView
 from django.forms import inlineformset_factory, NumberInput, Select
 from django.conf import settings
@@ -339,10 +339,24 @@ def search(request):
 
 
 def leaderboard(request):
+    users = (
+        EveUser.objects
+        .annotate(count=Count('scans'))
+        .order_by('-count')
+    )[:20]
+
+    ores = (
+        ScanResultOre.objects
+        .values('ore')
+        .annotate(quantity=Sum('quantity'))
+        .order_by('-quantity')
+    )
+
     return render(
         request,
         'moon_tracker/leaderboard.html',
         context={
-
+            'users': users,
+            'ores': ores,
         }
     )

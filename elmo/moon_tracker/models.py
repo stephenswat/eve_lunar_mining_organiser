@@ -68,6 +68,15 @@ ORE_CHOICES = (
 )
 
 
+def get_ore_name_from_id(oid):
+    r = []
+
+    for x in ORE_CHOICES:
+        r += x[1]
+
+    return dict(r)[oid]
+
+
 class ScanResultOre(models.Model):
     scan = models.ForeignKey(
         ScanResult,
