@@ -237,7 +237,7 @@ def batch_submit(request):
                         quantity=quantity
                     )
 
-                    statuses['success'] += 1
+                statuses['success'] += 1
 
             for status, count in statuses.items():
                 if status == 'error_no_moon':
