@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load pagination_tools %}
 
 {% block title %}
 {{ user.get_full_name }}
@@ -23,7 +24,64 @@
 
 <section class="content-section-a">
   <div class="container">
+    <h1>Info</h1>
     {{ user.get_full_name }} has scanned {{ scans.count }} moons.
+  </div>
+</section>
+
+<section class="content-section-b">
+  <div class="container">
+    <h1>Scans</h1>
+
+    {% if results.paginator.object_list|length > 0 %}
+    <div class="text-muted">{{ results.paginator.object_list|length }} moons matching your query were found.</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="20%">Region</th>
+          <th width="20%">Constellation</th>
+          <th width="20%">System</th>
+          <th width="20%">Planet</th>
+          <th width="20%">Moon</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+          <tr>
+            <td><a href="{% url 'list_region' r.moon.planet.system.constellation.region.name %}">{{ r.moon.planet.system.constellation.region }}</a></td>
+            <td><a href="{% url 'list_constellation' r.moon.planet.system.constellation.name %}">{{ r.moon.planet.system.constellation }}</a></td>
+            <td><a href="{% url 'list_system' r.moon.planet.system.name %}">{{ r.moon.planet.system }}</a></td>
+            <td>{{ r.moon.planet.as_roman }}</td>
+            <td><a href="{% url 'moon_detail' r.moon.planet.system.name r.moon.planet.number r.moon.number %}">{{ r.moon.number }}</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <nav>
+      <ul class="pagination">
+        {% if results.has_previous %}
+          <li class="page-item"><a class="page-link" href="?{% page_replace new_page=paginator.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+        {% endif %}
+        {% for i in results.paginator.page_range %}
+          {% if results.number == i %}
+            <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="?{% page_replace new_page=i %}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if results.has_next %}
+          <li class="page-item"><a class="page-link" href="?{% page_replace new_page=paginator.next_page_number %}">&raquo;</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% else %}
+      <div class="text-muted">Unfortunately no moons matching your query were found.</div>
+    {% endif %}
   </div>
 </section>
 

@@ -232,12 +232,32 @@ def profile(request, uid=None):
     else:
         user = request.user
 
+    scans = (
+        ScanResult.objects
+        .prefetch_related(
+            'moon', 'moon__planet', 'moon__planet__system'
+        )
+        .filter(owner=user)
+        .order_by('id')
+    )
+
+    paginator = Paginator(scans, 20)
+
+    page = request.GET.get('page', 1)
+
+    try:
+        results = paginator.page(page)
+    except PageNotAnInteger:
+        results = paginator.page(1)
+    except EmptyPage:
+        results = paginator.page(paginator.num_pages)
+
     return render(
         request,
         'moon_tracker/profile.html',
         context={
             'user': user,
-            'scans': ScanResult.objects.filter(owner=user)
+            'results': results
         }
     )
 
