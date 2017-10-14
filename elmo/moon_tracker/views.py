@@ -270,7 +270,7 @@ def search(request):
 
         paginator = Paginator(scan_ores, 20)
 
-        page = request.GET.get('page', 0)
+        page = request.GET.get('page', 1)
 
         try:
             results = paginator.page(page)
