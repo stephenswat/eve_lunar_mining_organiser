@@ -11,21 +11,25 @@ class Command(BaseCommand):
         ct_constellation = ContentType.objects.get(app_label='eve_sde', model='constellation')
         ct_solarsystem = ContentType.objects.get(app_label='eve_sde', model='solarsystem')
 
-        for ct in [ct_region, ct_constellation, ct_solarsystem]:
+        for cn, ct in [
+            ('reg', ct_region),
+            ('con', ct_constellation),
+            ('sys', ct_solarsystem)
+        ]:
             Permission.objects.create(
-                codename='can_view_scans',
+                codename=cn + '_can_view_scans',
                 name='Can view all scans in this location',
                 content_type=ct
             )
 
             Permission.objects.create(
-                codename='can_add_scans',
+                codename=cn + '_can_add_scans',
                 name='Can add new scans in this location',
                 content_type=ct
             )
 
             Permission.objects.create(
-                codename='can_delete_scans',
+                codename=cn + '_can_delete_scans',
                 name='Can delete other people\'s scans in this location',
                 content_type=ct
             )

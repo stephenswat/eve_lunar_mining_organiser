@@ -7,6 +7,8 @@ from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 
+from guardian.shortcuts import get_objects_for_user
+
 from eve_auth.models import EveUser
 from eve_sde.models import Region, Constellation, SolarSystem, Moon
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
@@ -253,6 +255,9 @@ def search(request):
             .filter(
                 quantity__gte=form.cleaned_data['min_quantity'],
                 ore__in=form.cleaned_data['ore_type'],
+                scan__moon__planet__system__constellation__region__in=get_objects_for_user(request.user, 'eve_sde.reg_can_view_scans'),
+                scan__moon__planet__system__constellation__in=get_objects_for_user(request.user, 'eve_sde.con_can_view_scans'),
+                scan__moon__planet__system__in=get_objects_for_user(request.user, 'eve_sde.sys_can_view_scans'),
             )
             .order_by('-quantity')
         )
