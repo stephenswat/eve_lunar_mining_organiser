@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^region/(?P<region>.+)/$', views.ConstellationListView.as_view(), name='list_region'),
     url(r'^submit/$', views.batch_submit, name='batch_submit'),
     url(r'^search/$', views.search, name='search'),
+    url(r'^leaderboard/$', views.leaderboard, name='leaderboard'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^profile/(?P<uid>\d+)$', views.profile, name='profile'),
     url(r'^$', views.RegionListView.as_view(), name='list_universe'),

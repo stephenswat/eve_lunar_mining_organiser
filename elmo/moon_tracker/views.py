@@ -336,3 +336,13 @@ def search(request):
             'results': results
         }
     )
+
+
+def leaderboard(request):
+    return render(
+        request,
+        'moon_tracker/leaderboard.html',
+        context={
+
+        }
+    )
