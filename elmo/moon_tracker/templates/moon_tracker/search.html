@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap %}
+{% load pagination_tools %}
+
+{% block title %}
+{{ user.get_full_name }}
+{% endblock %}
+
+{% block content %}
+
+<header class="intro-header short profile">
+  <div class="container">
+    <div class="intro-message">
+      <h1>
+        Moon search
+      </h1>
+    </div>
+  </div>
+</header>
+
+<section class="content-section-a">
+  <div class="container">
+    <h1>Query</h1>
+    <form>
+      {{ form | bootstrap }}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% if results is not None %}
+<section class="content-section-b">
+  <div class="container">
+    <h1>Results</h1>
+
+    {% if results.paginator.object_list|length > 0 %}
+    <div class="text-muted">{{ results.paginator.object_list|length }} moons matching your query were found.</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="20%">Region</th>
+          <th width="15%">Constellation</th>
+          <th width="15%">System</th>
+          <th width="10%">Planet</th>
+          <th width="10%">Moon</th>
+          <th width="20%">Ore</th>
+          <th width="10%">Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+          <tr>
+            <td><a href="{% url 'list_region' r.get_moon.planet.system.constellation.region.name %}">{{ r.get_moon.planet.system.constellation.region }}</a></td>
+            <td><a href="{% url 'list_constellation' r.get_moon.planet.system.constellation.name %}">{{ r.get_moon.planet.system.constellation }}</a></td>
+            <td><a href="{% url 'list_system' r.get_moon.planet.system.name %}">{{ r.get_moon.planet.system }}</a></td>
+            <td>{{ r.get_moon.planet.as_roman }}</td>
+            <td><a href="{% url 'moon_detail' r.get_moon.planet.system.name r.get_moon.planet.number r.get_moon.number %}">{{ r.get_moon.number }}</a></td>
+            <td><img src="https://image.eveonline.com/Type/{{ r.ore }}_32.png" /> {{ r.get_ore_display }}</td>
+            <td>{{ r.get_percentage | floatformat:1 }}%</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <nav>
+      <ul class="pagination">
+        {% if results.has_previous %}
+          <li class="page-item"><a class="page-link" href="?{% page_replace new_page=paginator.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+        {% endif %}
+        {% for i in results.paginator.page_range %}
+          {% if results.number == i %}
+            <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="?{% page_replace new_page=i %}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if results.has_next %}
+          <li class="page-item"><a class="page-link" href="?{% page_replace new_page=paginator.next_page_number %}">&raquo;</a></li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% else %}
+      <div class="text-muted">Unfortunately no moons matching your query were found.</div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

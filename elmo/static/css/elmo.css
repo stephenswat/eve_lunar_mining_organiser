@@ -349,3 +349,18 @@ p.copyright {
     text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
     font-size: 14pt;
 }
+
+#id_ore_type {
+    height: 350px;
+}
+
+#id_ore_type >optgroup >option {
+    background-repeat: no-repeat;
+    height: 32px;
+    padding-left: 40px;
+    padding-top: 6px;
+}
+
+.table >tbody >tr >td {
+    vertical-align: middle;
+}

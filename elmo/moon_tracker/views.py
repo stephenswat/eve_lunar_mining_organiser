@@ -4,12 +4,13 @@ from django.db.models import Count
 from django.views.generic.list import ListView
 from django.forms import inlineformset_factory, NumberInput, Select
 from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from eve_auth.models import EveUser
 from eve_sde.models import Region, Constellation, SolarSystem, Moon
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
 from moon_tracker.models import ScanResult, ScanResultOre
-from moon_tracker.forms import BatchMoonScanForm
+from moon_tracker.forms import BatchMoonScanForm, OreSearchForm
 
 
 class MoonContainerListView(ListView):
@@ -234,5 +235,43 @@ def profile(request, uid=None):
         context={
             'user': user,
             'scans': ScanResult.objects.filter(owner=user)
+        }
+    )
+
+
+def search(request):
+    form = OreSearchForm(request.GET)
+    results = None
+
+    if form.is_bound and form.is_valid():
+        scan_ores = (
+            ScanResultOre.objects
+            .prefetch_related(
+                'scan', 'scan__moon', 'scan__moon__planet', 'scan__moon__planet__system'
+            )
+            .filter(
+                quantity__gte=form.cleaned_data['min_quantity'],
+                ore__in=form.cleaned_data['ore_type'],
+            )
+            .order_by('-quantity')
+        )
+
+        paginator = Paginator(scan_ores, 20)
+
+        page = request.GET.get('page', 0)
+
+        try:
+            results = paginator.page(page)
+        except PageNotAnInteger:
+            results = paginator.page(1)
+        except EmptyPage:
+            results = paginator.page(paginator.num_pages)
+
+    return render(
+        request,
+        'moon_tracker/search.html',
+        context={
+            'form': form,
+            'results': results
         }
     )

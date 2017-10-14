@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'guardian',
     'eve_sde',
     'eve_auth',
-    'moon_tracker'
+    'moon_tracker',
+    'bootstrapform'
 ]
 
 MIDDLEWARE = [

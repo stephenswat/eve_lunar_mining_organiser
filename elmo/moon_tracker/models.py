@@ -82,5 +82,8 @@ class ScanResultOre(models.Model):
     def get_percentage(self):
         return self.quantity * 100
 
+    def get_moon(self):
+        return self.scan.moon
+
     class Meta:
         default_permissions = ()
