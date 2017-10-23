@@ -31,10 +31,10 @@
 
     {% if not can_view %}
       <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
-    {% elif True %}
+    {% elif moon_ann.final_scan is None %}
       <p class="text-muted">No conclusive results have been found for this moon.</p>
     {% else %}
-      {% display_scan scan %}
+      {% display_scan moon_ann.final_scan "own" %}
     {% endif %}
 
   </div>
