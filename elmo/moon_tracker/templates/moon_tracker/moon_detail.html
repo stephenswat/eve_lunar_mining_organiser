@@ -45,11 +45,26 @@
     <h1>Other Scan Results</h1>
 
     {% if can_view %}
-      {% for scan in scans %}
-        {% display_scan scan classes="other" %}
-      {% empty%}
+      {% if scans|length > 0 %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th width="20%">Scanner</th>
+              <th width="80%">Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for scan in scans %}
+              <tr>
+                <td><a href="{% url 'profile' uid=scan.owner.character_id %}">{{ scan.owner.get_full_name }}</a></td>
+                <td>{% display_scan scan classes="other" %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
         <p class="text-muted">No scan results for this moon were found.</p>
-      {% endfor %}
+      {% endif %}
     {% else %}
       <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
     {% endif %}
