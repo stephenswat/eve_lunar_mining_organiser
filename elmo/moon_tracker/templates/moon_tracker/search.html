@@ -62,7 +62,7 @@ Moon Search
             <td><a href="{% url 'list_system' r.get_moon.planet.system.name %}">{{ r.get_moon.planet.system }}</a></td>
             <td>{{ r.get_moon.planet.as_roman }}</td>
             <td><a href="{% url 'moon_detail' r.get_moon.planet.system.name r.get_moon.planet.number r.get_moon.number %}">{{ r.get_moon.number }}</a></td>
-            <td><img src="https://image.eveonline.com/Type/{{ r.ore }}_32.png" /> {{ r.get_ore_display }}</td>
+            <td><img src="https://image.eveonline.com/Type/{{ r.ore.id }}_32.png" /> {{ r.ore.name }}</td>
             <td>{{ r.get_percentage | floatformat:1 }}%</td>
           </tr>
         {% endfor %}
