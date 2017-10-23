@@ -130,9 +130,6 @@ class Command(BaseCommand):
     help = 'Creates ore and mineral records.'
 
     def handle(self, *args, **options):
-        Ore.objects.all().delete()
-        Mineral.objects.all().delete()
-        OreMineral.objects.all().delete()
         self.create_ores()
         self.create_minerals()
         self.create_yields()
