@@ -16,6 +16,11 @@ from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can
 from moon_tracker.models import ScanResult, ScanResultOre, Moon
 from moon_tracker.forms import BatchMoonScanForm, OreSearchForm
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class MoonContainerListView(ListView):
     template_name = 'moon_tracker/grid_list.html'

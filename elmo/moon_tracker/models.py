@@ -2,6 +2,10 @@ from django.db import models, IntegrityError
 from django.conf import settings
 
 from eve_sde.models import Moon as SDEMoon
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_ore_name_from_id(oid):
