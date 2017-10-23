@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% load pagination_tools %}
-{% load scan_result_tags %}
 
 {% block title %}
 Leaderboard
@@ -59,8 +58,8 @@ Leaderboard
       <tbody>
         {% for r in ores %}
           <tr>
-            <td><img src="https://image.eveonline.com/Type/{{ r.ore }}_32.png" /> {{ r.ore | ore_id_to_name }}</td>
-            <td>{{ r.quantity | floatformat:2 }}</td>
+            <td><img src="https://image.eveonline.com/Type/{{ r.ore }}_32.png" /> {{ r.ore__name }}</td>
+            <td>{{ r.q | floatformat:2 }}</td>
           </tr>
         {% endfor %}
       </tbody>

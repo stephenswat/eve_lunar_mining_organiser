@@ -336,10 +336,12 @@ def leaderboard(request):
 
     ores = (
         ScanResultOre.objects
-        .values('ore')
-        .annotate(quantity=Sum('quantity'))
-        .order_by('-quantity')
+        .values('ore', 'ore__name')
+        .annotate(q=Sum('quantity'))
+        .order_by('-q')
     )
+
+    print(ores)
 
     return render(
         request,
