@@ -109,3 +109,9 @@ class OreMineral(models.Model):
 
     class Meta:
         default_permissions = ()
+
+
+class MoonAnnotation(models.Model):
+    moon = models.OneToOneField(Moon, primary_key=True)
+    alert = models.BooleanField(db_index=True)
+    final_scan = models.ForeignKey(ScanResult, null=True)

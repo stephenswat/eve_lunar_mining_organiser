@@ -14,7 +14,7 @@ from guardian.shortcuts import get_objects_for_user
 from eve_auth.models import EveUser
 from eve_sde.models import Region, Constellation, SolarSystem, Moon
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
-from moon_tracker.models import ScanResult, ScanResultOre
+from moon_tracker.models import ScanResult, ScanResultOre, MoonAnnotation
 from moon_tracker.forms import BatchMoonScanForm, OreSearchForm
 
 
@@ -177,6 +177,14 @@ def list_system(request, system):
 def moon_detail(request, system, planet, moon):
     moon_obj = get_object_or_404(Moon, number=moon, planet__number=planet, planet__system__name=system)
 
+    moon_ann = MoonAnnotation.objects.get_or_create(
+        moon=moon_obj,
+        defaults={
+            'alert': False,
+            'final_scan': None
+        }
+    )
+
     scans = ScanResult.objects.filter(moon=moon_obj)
 
     if not request.user.is_anonymous():
@@ -192,6 +200,7 @@ def moon_detail(request, system, planet, moon):
         'moon_tracker/moon_detail.html',
         context={
             'moon': moon_obj,
+            'moon_ann': moon_ann,
             'scans': scans,
             'user_scan': user_scan,
             'can_view': user_can_view_scans(request.user, moon_obj),
