@@ -3,6 +3,7 @@ from django.conf import settings
 
 from eve_sde.models import Moon as SDEMoon
 import logging
+import math
 
 
 logger = logging.getLogger(__name__)
@@ -19,13 +20,15 @@ def get_ore_name_from_id(oid):
 
 class Moon(SDEMoon):
     def get_annotation(self):
-        return MoonAnnotation.objects.get_or_create(
+        ann, _ = MoonAnnotation.objects.get_or_create(
             moon=self,
             defaults={
                 'alert': False,
                 'final_scan': None
             }
         )
+
+        return ann
 
     def add_scan(self, owner, materials):
         try:
@@ -43,10 +46,48 @@ class Moon(SDEMoon):
                 quantity=quantity
             )
 
+        logger.info(
+            "New scan for %s added by user %s.",
+            str(self),
+            owner.get_full_name()
+        )
+
         self.attempt_finalization()
 
     def attempt_finalization(self):
-        print(self)
+        if self.scans.count() < settings.MOON_TRACKER_MINIMUM_SCANS:
+            logger.info(
+                "Finalization not started for %s: %d/%d scans available.",
+                str(self),
+                self.scans.count(),
+                settings.MOON_TRACKER_MINIMUM_SCANS
+            )
+            return
+        if self.get_annotation().final_scan is not None:
+            logger.info(
+                "Finalization already complete for %s.",
+                str(self),
+            )
+            return
+
+        logger.info("Finalization started for %s.", str(self))
+
+        reference = self.scans.all()[0]
+        ann = self.get_annotation()
+
+        for scan in self.scans.all():
+            if not reference.similar_to(scan):
+                ann.final_scan = None
+                ann.alert = True
+                logger.warning("Dissimilar scan results found for %s.", str(self))
+                break
+        else:
+            ann.final_scan = reference
+            ann.alert = False
+            logger.info("Finalization complete for %s.", str(self))
+
+        ann.save()
+
 
     class Meta:
         proxy = True
@@ -121,6 +162,22 @@ class ScanResult(models.Model):
     )
 
     created = models.DateTimeField(auto_now_add=True)
+
+    def get_ore_dict(self):
+        return {o.ore_id: o.quantity for o in self.scanresultore_set.all()}
+
+    def similar_to(self, other):
+        d1 = self.get_ore_dict()
+        d2 = other.get_ore_dict()
+
+        if set(d1.keys()) != set(d2.keys()):
+            return False
+
+        for k in d1.keys():
+            if not math.isclose(d1[k], d2[k], abs_tol=0.01):
+                return False
+
+        return True
 
     class Meta:
         unique_together = (("owner", "moon"),)
