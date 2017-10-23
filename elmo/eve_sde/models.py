@@ -83,6 +83,7 @@ class Planet(models.Model):
 
     class Meta:
         default_permissions = ()
+        ordering = ('number',)
 
 
 class Moon(models.Model):
@@ -101,3 +102,4 @@ class Moon(models.Model):
 
     class Meta:
         default_permissions = ()
+        ordering = ('number',)
