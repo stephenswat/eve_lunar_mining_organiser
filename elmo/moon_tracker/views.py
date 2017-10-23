@@ -177,13 +177,12 @@ def list_system(request, system):
         .annotate(
             mineral_id=F('moonannotation__final_scan__scanresultore__ore__oremineral__mineral__id'),
             per_m3=ExpressionWrapper(
-                (1 / F('moonannotation__final_scan__scanresultore__ore__volume')) *
+                0.01 * (1 / F('moonannotation__final_scan__scanresultore__ore__volume')) *
                 F('moonannotation__final_scan__scanresultore__quantity') *
                 F('moonannotation__final_scan__scanresultore__ore__oremineral__quantity'),
                 output_field=FloatField()
             ),
             mineral_volume=F('moonannotation__final_scan__scanresultore__ore__oremineral__mineral__volume'),
-
         )
         .values(
             'id',
@@ -195,7 +194,7 @@ def list_system(request, system):
 
     for i in moon_minerals:
         d = mineral_dict[i['id']]
-        d[i['mineral_id']] = d.get(i['mineral_id'], 0.0) + (i['per_m3'] * 1000 * i['mineral_volume'])
+        d[i['mineral_id']] = d.get(i['mineral_id'], 0.0) + (i['per_m3'] * 1000)
 
     return render(
         request,
