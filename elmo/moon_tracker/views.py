@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from django.db.models import Count, Sum, Q
+from django.db.models import Count, Sum, Q, F
 from django.views.generic.list import ListView
 from django.forms import inlineformset_factory, NumberInput, Select
 from django.conf import settings
@@ -13,7 +13,7 @@ from guardian.shortcuts import get_objects_for_user
 from eve_auth.models import EveUser
 from eve_sde.models import Region, Constellation, SolarSystem
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
-from moon_tracker.models import ScanResult, ScanResultOre, Moon
+from moon_tracker.models import ScanResult, ScanResultOre, Moon, MoonAnnotation
 from moon_tracker.forms import BatchMoonScanForm, OreSearchForm
 
 import logging
@@ -156,35 +156,55 @@ class SolarSystemListView(MoonContainerListView):
 def list_system(request, system):
     system_obj = get_object_or_404(SolarSystem.objects.prefetch_related('planets', 'planets__moons'), name=system)
 
-    valid_moons = set()
-
-    for p in (
-        Moon.objects
-        .filter(planet__system=system_obj)
-        .annotate(scan_count=Count('scans'))
-        .filter(scan_count__gte=settings.MOON_TRACKER_MINIMUM_SCANS)
-        .values_list('id')
-    ):
-        valid_moons.add(p[0])
-
-    if request.session.get('use_table_view', False):
+    if request.session.get('use_table_view', True):
         template = 'moon_tracker/system_table.html'
     else:
         template = 'moon_tracker/system_list.html'
+
+    mineral_dict = {}
+    moon_minerals = (
+        Moon.objects
+        .filter(
+            planet__system=system_obj,
+            moonannotation__final_scan__isnull=False
+        )
+        .annotate(
+            ore_quantity=F('moonannotation__final_scan__scanresultore__quantity'),
+            mineral_id=F('moonannotation__final_scan__scanresultore__ore__oremineral__mineral__id'),
+            mineral_quantity=F('moonannotation__final_scan__scanresultore__ore__oremineral__quantity')
+        )
+        .values(
+            'id',
+            'ore_quantity',
+            'mineral_id',
+            'mineral_quantity'
+        )
+    )
+
+    for i in moon_minerals:
+        if i['id'] not in mineral_dict:
+            mineral_dict[i['id']] = {}
+
+        d = mineral_dict[i['id']]
+        d[i['mineral_id']] = d.get(i['mineral_id'], 0.0) + (i['ore_quantity'] * i['mineral_quantity'])
 
     return render(
         request,
         template,
         context={
-            'moon_list': Moon.objects.filter(planet__system=system_obj).prefetch_related('moonannotation', 'planet'),
-            'valid_moons': valid_moons,
             'parent': system_obj,
+            'mineral_dict': mineral_dict,
             'type': 'system',
             'mineral_list': [
                 34, 35, 36, 37, 38, 39, 40, 11399, 16634, 16635, 16633, 16636,
                 16640, 16639, 16638, 16637, 16643, 16641, 16644, 16642, 16647,
                 16648, 16646, 16649, 16650, 16651, 16652, 16653
-            ]
+            ],
+            'can_view': (
+                request.user.has_perm('eve_sde.sys_can_view_scans', system_obj) or
+                request.user.has_perm('eve_sde.con_can_view_scans', system_obj.constellation) or
+                request.user.has_perm('eve_sde.reg_can_view_scans', system_obj.constellation.region)
+            )
         }
     )
 
@@ -193,7 +213,7 @@ def moon_detail(request, system, planet, moon):
     moon_obj = get_object_or_404(Moon, number=moon, planet__number=planet, planet__system__name=system)
     moon_ann = moon_obj.get_annotation()
 
-    scans = ScanResult.objects.filter(moon=moon_obj)
+    scans = ScanResult.objects.filter(moon=moon_obj).prefetch_related('scanresultore_set__ore__oremineral_set__mineral')
 
     if not request.user.is_anonymous():
         try:
