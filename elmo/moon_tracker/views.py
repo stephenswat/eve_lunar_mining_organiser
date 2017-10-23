@@ -156,7 +156,13 @@ class SolarSystemListView(MoonContainerListView):
 def list_system(request, system):
     system_obj = get_object_or_404(SolarSystem.objects.prefetch_related('planets', 'planets__moons'), name=system)
 
-    if request.session.get('use_table_view', True):
+    if 'view' in request.GET:
+        if request.GET['view'] == 'table':
+            request.session['use_table_view'] = True
+        else:
+            request.session['use_table_view'] = False
+
+    if request.session.get('use_table_view', False):
         template = 'moon_tracker/system_table.html'
     else:
         template = 'moon_tracker/system_list.html'

@@ -5,6 +5,7 @@
 
 <section class="content-section-a">
   <div class="container">
+    <a href="?view=table">View as table</a>
     <div class="card-columns planet-grid" style="column-count: 2;">
       {% for p in parent.planets.all %}
         {% if p.moons.count > 0 %}
