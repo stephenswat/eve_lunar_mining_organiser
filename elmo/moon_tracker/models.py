@@ -95,6 +95,7 @@ class Mineral(models.Model):
 
     id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(max_length=64)
+    volume = models.FloatField()
 
     rarity = models.CharField(choices=RARITY_CHOICES, max_length=16)
 

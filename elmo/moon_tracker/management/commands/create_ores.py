@@ -48,39 +48,39 @@ ORE_CHOICES = (
 
 
 MINERAL_CHOICES = (
-    (34, 'Tritanium', 'mineral'),
-    (35, 'Pyerite', 'mineral'),
-    (36, 'Mexallon', 'mineral'),
-    (37, 'Isogen', 'mineral'),
-    (38, 'Nocxium', 'mineral'),
-    (39, 'Zydrine', 'mineral'),
-    (40, 'Megacyte', 'mineral'),
-    (11399, 'Morphite', 'mineral'),
+    (34, 0.01, 'Tritanium', 'mineral'),
+    (35, 0.01, 'Pyerite', 'mineral'),
+    (36, 0.01, 'Mexallon', 'mineral'),
+    (37, 0.01, 'Isogen', 'mineral'),
+    (38, 0.01, 'Nocxium', 'mineral'),
+    (39, 0.01, 'Zydrine', 'mineral'),
+    (40, 0.01, 'Megacyte', 'mineral'),
+    (11399, 0.01, 'Morphite', 'mineral'),
 
-    (16634, 'Atmospheric Gases', 'r4'),
-    (16635, 'Evaporite Deposits', 'r4'),
-    (16633, 'Hydrocarbons', 'r4'),
-    (16636, 'Silicates', 'r4'),
+    (16634, 0.10, 'Atmospheric Gases', 'r4'),
+    (16635, 0.10, 'Evaporite Deposits', 'r4'),
+    (16633, 0.10, 'Hydrocarbons', 'r4'),
+    (16636, 0.10, 'Silicates', 'r4'),
 
-    (16640, 'Cobalt', 'r8'),
-    (16639, 'Scandium', 'r8'),
-    (16638, 'Titanium', 'r8'),
-    (16637, 'Tungsten', 'r8'),
+    (16640, 0.40, 'Cobalt', 'r8'),
+    (16639, 0.40, 'Scandium', 'r8'),
+    (16638, 0.40, 'Titanium', 'r8'),
+    (16637, 0.40, 'Tungsten', 'r8'),
 
-    (16643, 'Cadmium', 'r16'),
-    (16641, 'Chromium', 'r16'),
-    (16644, 'Platinum', 'r16'),
-    (16642, 'Vanadium', 'r16'),
+    (16643, 0.40, 'Cadmium', 'r16'),
+    (16641, 0.60, 'Chromium', 'r16'),
+    (16644, 1.00, 'Platinum', 'r16'),
+    (16642, 1.00, 'Vanadium', 'r16'),
 
-    (16647, 'Caesium', 'r32'),
-    (16648, 'Hafnium', 'r32'),
-    (16646, 'Mercury', 'r32'),
-    (16649, 'Technetium', 'r32'),
+    (16647, 0.80, 'Caesium', 'r32'),
+    (16648, 0.80, 'Hafnium', 'r32'),
+    (16646, 0.80, 'Mercury', 'r32'),
+    (16649, 0.80, 'Technetium', 'r32'),
 
-    (16650, 'Dysprosium', 'r64'),
-    (16651, 'Neodymium', 'r64'),
-    (16652, 'Promethium', 'r64'),
-    (16653, 'Thulium', 'r64'),
+    (16650, 1.00, 'Dysprosium', 'r64'),
+    (16651, 1.00, 'Neodymium', 'r64'),
+    (16652, 1.00, 'Promethium', 'r64'),
+    (16653, 1.00, 'Thulium', 'r64'),
 )
 
 YIELDS = {
@@ -139,28 +139,33 @@ class Command(BaseCommand):
 
     def create_ores(self):
         for i, v, n, r in ORE_CHOICES:
-            Ore.objects.get_or_create(
+            Ore.objects.update_or_create(
                 id=i,
-                name=n,
-                rarity=r,
-                volume=v
+                defaults={
+                    'name': n,
+                    'rarity': r,
+                    'volume': v
+                }
             )
 
     def create_minerals(self):
-        for i, n, r in MINERAL_CHOICES:
-            Mineral.objects.get_or_create(
+        for i, v, n, r in MINERAL_CHOICES:
+            Mineral.objects.update_or_create(
                 id=i,
-                name=n,
-                rarity=r
+                defaults={
+                    'name': n,
+                    'rarity': r,
+                    'volume': v
+                }
             )
 
     def create_yields(self):
         for o, c in YIELDS.items():
-            ore = Ore.objects.get(id=o)
-
             for m, q in c.items():
-                OreMineral.objects.get_or_create(
-                    ore=ore,
+                OreMineral.objects.update_or_create(
+                    ore_id=o,
                     mineral_id=m,
-                    quantity=int(q / ore.volume)
+                    defaults={
+                        'quantity': q
+                    }
                 )
