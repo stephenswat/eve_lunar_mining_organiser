@@ -29,12 +29,12 @@
   <div class="container">
     <h1>Moon Contents</h1>
 
-    {% if can_view %}
-    {% for scan in scans %}
-    {% display_scan scan %}
-    {% endfor %}
+    {% if not can_view %}
+      <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
+    {% elif True %}
+      <p class="text-muted">No conclusive results have been found for this moon.</p>
     {% else %}
-    <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
+      {% display_scan scan %}
     {% endif %}
 
   </div>
@@ -42,14 +42,16 @@
 
 <section class="content-section-b">
   <div class="container">
-    <h1>Moon Information</h1>
+    <h1>Other Scan Results</h1>
 
     {% if can_view %}
-    {% for scan in scans %}
-    {% display_scan scan %}
-    {% endfor %}
+      {% for scan in scans %}
+        {% display_scan scan %}
+      {% empty%}
+        <p class="text-muted">No scan results for this moon were found.</p>
+      {% endfor %}
     {% else %}
-    <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
+      <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
     {% endif %}
 
   </div>
@@ -59,12 +61,10 @@
   <div class="container">
     <h1>Your Scan Result</h1>
 
-    {% if can_view %}
-    {% for scan in scans %}
-    {% display_scan scan %}
-    {% endfor %}
+    {% if user_scan is not None %}
+      {% display_scan user_scan %}
     {% else %}
-    <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
+      <p class="text-muted">You haven't submitted any scans for this moon.</p>
     {% endif %}
 
   </div>

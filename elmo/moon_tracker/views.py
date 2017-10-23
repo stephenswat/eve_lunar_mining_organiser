@@ -179,12 +179,21 @@ def moon_detail(request, system, planet, moon):
 
     scans = ScanResult.objects.filter(moon=moon_obj)
 
+    if not request.user.is_anonymous():
+        try:
+            user_scan = scans.get(owner=request.user)
+        except ScanResult.DoesNotExist:
+            user_scan = None
+    else:
+        user_scan = None
+
     return render(
         request,
         'moon_tracker/moon_detail.html',
         context={
             'moon': moon_obj,
             'scans': scans,
+            'user_scan': user_scan,
             'can_view': user_can_view_scans(request.user, moon_obj),
             'can_add': user_can_add_scans(request.user, moon_obj),
             'can_delete': user_can_delete_scans(request.user, moon_obj),
