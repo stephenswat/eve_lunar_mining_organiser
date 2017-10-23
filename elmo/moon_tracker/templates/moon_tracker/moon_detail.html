@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load result_display %}
 
 {% block title %}{{ moon.planet.system.name }} {{ moon.planet.as_roman }} - Moon {{ moon.number }}{% endblock %}
 
@@ -30,13 +31,7 @@
 
     {% if can_view %}
     {% for scan in scans %}
-    <div class="progress result-progress-bar" style="width: 100%;">
-      {% for ore in scan.constituents.all %}
-      <div class="progress-bar ore-{{ ore.ore }}" role="progressbar" style="width: {{ ore.get_percentage }}%">
-        <span>{{ ore.get_ore_display }} ({{ ore.get_percentage | floatformat }}%)</span>
-      </div>
-      {% endfor %}
-    </div>
+    {% display_scan scan %}
     {% endfor %}
     {% else %}
     <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
@@ -51,13 +46,7 @@
 
     {% if can_view %}
     {% for scan in scans %}
-    <div class="progress result-progress-bar" style="width: 100%;">
-      {% for ore in scan.constituents.all %}
-      <div class="progress-bar ore-{{ ore.ore }}" role="progressbar" style="width: {{ ore.get_percentage }}%">
-        <span>{{ ore.get_ore_display }} ({{ ore.get_percentage | floatformat }}%)</span>
-      </div>
-      {% endfor %}
-    </div>
+    {% display_scan scan %}
     {% endfor %}
     {% else %}
     <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
@@ -72,13 +61,7 @@
 
     {% if can_view %}
     {% for scan in scans %}
-    <div class="progress result-progress-bar" style="width: 100%;">
-      {% for ore in scan.constituents.all %}
-      <div class="progress-bar ore-{{ ore.ore }}" role="progressbar" style="width: {{ ore.get_percentage }}%">
-        <span>{{ ore.get_ore_display }} ({{ ore.get_percentage | floatformat }}%)</span>
-      </div>
-      {% endfor %}
-    </div>
+    {% display_scan scan %}
     {% endfor %}
     {% else %}
     <p class="text-muted">Sorry, but you don't have the permissions required to view scan results for this moon.</p>
