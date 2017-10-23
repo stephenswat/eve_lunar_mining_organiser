@@ -4,53 +4,6 @@ from django.conf import settings
 from eve_sde.models import Moon
 
 
-ORE_CHOICES = (
-    ('Standard Ores', (
-        (46675, 'Dark Ochre'),
-        (46676, 'Bistot'),
-        (46677, 'Crokite'),
-        (46678, 'Arkonor'),
-        (46679, 'Gneiss'),
-        (46680, 'Hedbergite'),
-        (46681, 'Hemorphite'),
-        (46682, 'Jaspet'),
-        (46683, 'Kernite'),
-        (46684, 'Omber'),
-        (46685, 'Plagioclase'),
-        (46686, 'Pyroxeres'),
-        (46687, 'Scordite'),
-        (46688, 'Spodumain'),
-        (46689, 'Veldspar'),
-    )),
-    ('Moon Ores', (
-        (45490, 'Zeolites'),
-        (45491, 'Sylvites'),
-        (45492, 'Bitumens'),
-        (45493, 'Coesite'),
-
-        (45494, 'Cobaltite'),
-        (45495, 'Euxenite'),
-        (45496, 'Titanite'),
-        (45497, 'Scheelite'),
-
-        (45498, 'Otavite'),
-        (45499, 'Sperrylite'),
-        (45500, 'Vanadinite'),
-        (45501, 'Chromite'),
-
-        (45502, 'Carnotite'),
-        (45503, 'Zircon'),
-        (45504, 'Pollucite'),
-        (45506, 'Cinnabar'),
-
-        (45510, 'Xenotime'),
-        (45511, 'Monazite'),
-        (45512, 'Loparite'),
-        (45513, 'Ytterbite'),
-    )),
-)
-
-
 def get_ore_name_from_id(oid):
     r = []
 
