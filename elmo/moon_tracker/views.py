@@ -220,8 +220,9 @@ def batch_submit(request):
                     continue
 
                 for ore, quantity in materials.items():
-                    result.constituents.create(
-                        ore=ore,
+                    ScanResultOre.objects.create(
+                        scan=result,
+                        ore_id=ore,
                         quantity=quantity
                     )
 

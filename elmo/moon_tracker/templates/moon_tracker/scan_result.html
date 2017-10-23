@@ -1,7 +1,7 @@
 <div class="progress result-progress-bar" style="width: 100%;">
-  {% for ore in scan.constituents.all %}
-  <div class="progress-bar ore-{{ ore.ore }}" role="progressbar" style="width: {{ ore.get_percentage }}%">
-    <span>{{ ore.get_ore_display }} ({{ ore.get_percentage | floatformat }}%)</span>
+  {% for ore in scan.scanresultore_set.all %}
+  <div class="progress-bar ore-{{ ore.ore.id }}" role="progressbar" style="width: {{ ore.get_percentage }}%">
+    <span>{{ ore.ore.name }} ({{ ore.get_percentage | floatformat }}%)</span>
   </div>
   {% endfor %}
 </div>
