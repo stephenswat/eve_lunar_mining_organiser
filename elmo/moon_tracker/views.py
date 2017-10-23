@@ -6,15 +6,14 @@ from django.forms import inlineformset_factory, NumberInput, Select
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from django.db import IntegrityError
 
 from collections import defaultdict
 from guardian.shortcuts import get_objects_for_user
 
 from eve_auth.models import EveUser
-from eve_sde.models import Region, Constellation, SolarSystem, Moon
+from eve_sde.models import Region, Constellation, SolarSystem
 from moon_tracker.utils import user_can_view_scans, user_can_add_scans, user_can_delete_scans
-from moon_tracker.models import ScanResult, ScanResultOre, MoonAnnotation
+from moon_tracker.models import ScanResult, ScanResultOre, Moon
 from moon_tracker.forms import BatchMoonScanForm, OreSearchForm
 
 
@@ -176,14 +175,7 @@ def list_system(request, system):
 
 def moon_detail(request, system, planet, moon):
     moon_obj = get_object_or_404(Moon, number=moon, planet__number=planet, planet__system__name=system)
-
-    moon_ann = MoonAnnotation.objects.get_or_create(
-        moon=moon_obj,
-        defaults={
-            'alert': False,
-            'final_scan': None
-        }
-    )
+    moon_ann = moon_obj.get_annotation()
 
     scans = ScanResult.objects.filter(moon=moon_obj)
 
@@ -229,20 +221,10 @@ def batch_submit(request):
                     continue
 
                 try:
-                    result = ScanResult.objects.create(
-                        moon=moon,
-                        owner=request.user
-                    )
-                except IntegrityError:
+                    moon.add_scan(request.user, materials)
+                except ScanResult.AlreadyExistsError:
                     statuses['error_exists_already'] += 1
                     continue
-
-                for ore, quantity in materials.items():
-                    ScanResultOre.objects.create(
-                        scan=result,
-                        ore_id=ore,
-                        quantity=quantity
-                    )
 
                 statuses['success'] += 1
 

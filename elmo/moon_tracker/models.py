@@ -1,7 +1,7 @@
-from django.db import models
+from django.db import models, IntegrityError
 from django.conf import settings
 
-from eve_sde.models import Moon
+from eve_sde.models import Moon as SDEMoon
 
 
 def get_ore_name_from_id(oid):
@@ -11,6 +11,41 @@ def get_ore_name_from_id(oid):
         r += x[1]
 
     return dict(r)[oid]
+
+
+class Moon(SDEMoon):
+    def get_annotation(self):
+        return MoonAnnotation.objects.get_or_create(
+            moon=self,
+            defaults={
+                'alert': False,
+                'final_scan': None
+            }
+        )
+
+    def add_scan(self, owner, materials):
+        try:
+            result = ScanResult.objects.create(
+                moon=self,
+                owner=owner
+            )
+        except IntegrityError:
+            raise ScanResult.AlreadyExistsError
+
+        for ore, quantity in materials.items():
+            ScanResultOre.objects.create(
+                scan=result,
+                ore_id=ore,
+                quantity=quantity
+            )
+
+        self.attempt_finalization()
+
+    def attempt_finalization(self):
+        print(self)
+
+    class Meta:
+        proxy = True
 
 
 class Mineral(models.Model):
@@ -85,6 +120,9 @@ class ScanResult(models.Model):
 
     class Meta:
         unique_together = (("owner", "moon"),)
+
+    class AlreadyExistsError(Exception):
+        pass
 
 
 class ScanResultOre(models.Model):
