@@ -36,6 +36,8 @@ class EveUser(AbstractBaseUser, PermissionsMixin, GuardianUserMixin):
 
     objects = EveUserManager()
 
+    created = models.DateTimeField(auto_now_add=True)
+
     USERNAME_FIELD = 'character_id'
 
     class Meta(object):

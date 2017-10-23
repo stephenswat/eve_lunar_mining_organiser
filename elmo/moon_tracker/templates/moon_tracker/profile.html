@@ -37,7 +37,7 @@
         <dt>Moons scanned</dt>
         <dd>{{ results.paginator.object_list|length }}</dd>
         <dt>Registration date</dt>
-        <dd>1970-01-01</dd>
+        <dd>{{ user.created|date:"F j, Y" }}</dd>
         <dt>Links</dt>
         <dd>
           <a href="https://zkillboard.com/character/{{ user.character_id }}/">zKillboard</a>
