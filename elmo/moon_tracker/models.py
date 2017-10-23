@@ -17,6 +17,8 @@ class ScanResult(models.Model):
         db_index=True
     )
 
+    created = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         unique_together = (("owner", "moon"),)
 
