@@ -204,4 +204,4 @@ class OreMineral(models.Model):
 class MoonAnnotation(models.Model):
     moon = models.OneToOneField(Moon, primary_key=True)
     alert = models.BooleanField(db_index=True)
-    final_scan = models.ForeignKey(ScanResult, null=True)
+    final_scan = models.ForeignKey(ScanResult, null=True, on_delete=models.SET_NULL)
