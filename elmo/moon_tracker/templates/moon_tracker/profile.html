@@ -24,8 +24,27 @@
 
 <section class="content-section-a">
   <div class="container">
-    <h1>Info</h1>
-    {{ user.get_full_name }} has scanned {{ scans.count }} moons.
+  <h1>User Info</h1>
+  <div class="row">
+    <div class="col-sm-6">
+      <img src="https://image.eveonline.com/Character/{{ user.character_id }}_256.jpg" alt="" class="img-rounded img-responsive" />
+    </div>
+    <div class="col-sm-6">
+      <h2>{{ user.get_full_name }}</h2>
+      <dl>
+        <dt>Character ID</dt>
+        <dd>{{ user.character_id }}</dd>
+        <dt>Moons scanned</dt>
+        <dd>{{ results.paginator.object_list|length }}</dd>
+        <dt>Registration date</dt>
+        <dd>1970-01-01</dd>
+        <dt>Links</dt>
+        <dd>
+          <a href="https://zkillboard.com/character/{{ user.character_id }}/">zKillboard</a>
+          <a href="https://evewho.com/pilot/{{ user.get_full_name }}/">Eve Who</a>
+        </dd>
+      </dl>
+    </div>
   </div>
 </section>
 
