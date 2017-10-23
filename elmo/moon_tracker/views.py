@@ -285,8 +285,6 @@ def search(request):
     results = None
 
     if form.is_bound and form.is_valid():
-        print(get_objects_for_user(request.user, 'eve_sde.reg_can_view_scans'))
-
         has_permissions = (
             Q(scan__moon__planet__system__constellation__region__in=get_objects_for_user(request.user, 'eve_sde.reg_can_view_scans')) |
             Q(scan__moon__planet__system__constellation__in=get_objects_for_user(request.user, 'eve_sde.con_can_view_scans')) |
@@ -340,8 +338,6 @@ def leaderboard(request):
         .annotate(q=Sum('quantity'))
         .order_by('-q')
     )
-
-    print(ores)
 
     return render(
         request,
