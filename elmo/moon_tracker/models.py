@@ -9,15 +9,6 @@ import math
 logger = logging.getLogger(__name__)
 
 
-def get_ore_name_from_id(oid):
-    r = []
-
-    for x in ORE_CHOICES:
-        r += x[1]
-
-    return dict(r)[oid]
-
-
 class Moon(SDEMoon):
     def get_annotation(self):
         ann, _ = MoonAnnotation.objects.get_or_create(
