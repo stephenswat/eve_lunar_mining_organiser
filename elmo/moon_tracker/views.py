@@ -177,17 +177,6 @@ def list_system(request, system):
 def moon_detail(request, system, planet, moon):
     moon_obj = get_object_or_404(Moon, number=moon, planet__number=planet, planet__system__name=system)
 
-    form = ScanResultOreFormSet = inlineformset_factory(
-        ScanResult,
-        ScanResultOre,
-        fields=('ore', 'quantity'),
-        can_delete=False,
-        widgets={
-            'ore': Select(attrs={'class': 'custom-select form-control ore-type-input'}),
-            'quantity': NumberInput(attrs={'value': 0, 'max': 100, 'class': 'form-control ore-percentage-input'})
-        }
-    )
-
     scans = ScanResult.objects.filter(moon=moon_obj)
 
     return render(
@@ -199,7 +188,6 @@ def moon_detail(request, system, planet, moon):
             'can_view': user_can_view_scans(request.user, moon_obj),
             'can_add': user_can_add_scans(request.user, moon_obj),
             'can_delete': user_can_delete_scans(request.user, moon_obj),
-            'form': form
         }
     )
 
