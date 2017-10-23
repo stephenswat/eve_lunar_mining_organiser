@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from django.db.models import Count, Sum, Q, F
+from django.db.models import Count, Sum, Q, F, FloatField, ExpressionWrapper
 from django.views.generic.list import ListView
 from django.forms import inlineformset_factory, NumberInput, Select
 from django.conf import settings
@@ -167,7 +167,7 @@ def list_system(request, system):
     else:
         template = 'moon_tracker/system_list.html'
 
-    mineral_dict = {}
+    mineral_dict = defaultdict(dict)
     moon_minerals = (
         Moon.objects
         .filter(
@@ -175,24 +175,27 @@ def list_system(request, system):
             moonannotation__final_scan__isnull=False
         )
         .annotate(
-            ore_quantity=F('moonannotation__final_scan__scanresultore__quantity'),
             mineral_id=F('moonannotation__final_scan__scanresultore__ore__oremineral__mineral__id'),
-            mineral_quantity=F('moonannotation__final_scan__scanresultore__ore__oremineral__quantity')
+            per_m3=ExpressionWrapper(
+                (1 / F('moonannotation__final_scan__scanresultore__ore__volume')) *
+                F('moonannotation__final_scan__scanresultore__quantity') *
+                F('moonannotation__final_scan__scanresultore__ore__oremineral__quantity'),
+                output_field=FloatField()
+            ),
+            mineral_volume=F('moonannotation__final_scan__scanresultore__ore__oremineral__mineral__volume'),
+
         )
         .values(
             'id',
-            'ore_quantity',
             'mineral_id',
-            'mineral_quantity'
+            'mineral_volume',
+            'per_m3'
         )
     )
 
     for i in moon_minerals:
-        if i['id'] not in mineral_dict:
-            mineral_dict[i['id']] = {}
-
         d = mineral_dict[i['id']]
-        d[i['mineral_id']] = d.get(i['mineral_id'], 0.0) + (i['ore_quantity'] * i['mineral_quantity'])
+        d[i['mineral_id']] = d.get(i['mineral_id'], 0.0) + (i['per_m3'] * 1000 * i['mineral_volume'])
 
     return render(
         request,
@@ -202,7 +205,7 @@ def list_system(request, system):
             'mineral_dict': mineral_dict,
             'type': 'system',
             'mineral_list': [
-                34, 35, 36, 37, 38, 39, 40, 11399, 16634, 16635, 16633, 16636,
+                34, 35, 36, 37, 38, 39, 40, 16634, 16635, 16633, 16636,
                 16640, 16639, 16638, 16637, 16643, 16641, 16644, 16642, 16647,
                 16648, 16646, 16649, 16650, 16651, 16652, 16653
             ],

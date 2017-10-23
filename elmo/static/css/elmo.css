@@ -385,3 +385,7 @@ p.copyright {
 .mineral-table td, .mineral-table th {
     padding: 5px 1px 5px 1px;
 }
+
+.container.extra-wide {
+    max-width: 1540px;
+}
