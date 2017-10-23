@@ -79,6 +79,22 @@ class Moon(SDEMoon):
 
         ann.save()
 
+    def get_mineral_dict(self):
+        result = {}
+
+        if self.moonannotation is None or self.moonannotation.final_scan is None:
+            return None
+
+        f = self.moonannotation.final_scan.scanresultore_set.prefetch_related('ore__oremineral_set__mineral')
+
+        for sro in f.all():
+            weight = sro.quantity
+
+            for mro in sro.ore.oremineral_set.all():
+                i = mro.mineral.id
+                result[i] = result.get(i, 0) + (weight * mro.quantity)
+
+        return result
 
     class Meta:
         proxy = True

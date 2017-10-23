@@ -1,0 +1,40 @@
+{% extends "moon_tracker/system_page.html" %}
+{% load static %}
+{% load table_view_tools %}
+
+{% block content %}
+
+<section class="content-section-a">
+  <div class="container">
+    <table class="table mineral-table">
+      <thead>
+        <tr>
+          <th width="16%">Moon</th>
+          {% for g in mineral_list %}
+            <th width="3%"><img src="https://image.eveonline.com/Type/{{ g }}_32.png"></th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in moon_list %}
+          <tr>
+            <td><a href="{% url 'moon_detail' parent.name m.planet.number m.number %}">{{ m }}</a></td>
+            {% with mineral_dict=m.get_mineral_dict %}
+              {% for g in mineral_list %}
+                <td class="small">
+                  {% if g in mineral_dict %}
+                    {{ mineral_dict|get_ore:g|floatformat:0 }}
+                  {% else %}
+                    &mdash;
+                  {% endif %}
+                </td>
+              {% endfor %}
+            {% endwith %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{% endblock %}

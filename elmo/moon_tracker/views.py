@@ -156,7 +156,7 @@ class SolarSystemListView(MoonContainerListView):
 def list_system(request, system):
     system_obj = get_object_or_404(SolarSystem.objects.prefetch_related('planets', 'planets__moons'), name=system)
 
-    moons = set()
+    valid_moons = set()
 
     for p in (
         Moon.objects
@@ -165,15 +165,26 @@ def list_system(request, system):
         .filter(scan_count__gte=settings.MOON_TRACKER_MINIMUM_SCANS)
         .values_list('id')
     ):
-        moons.add(p[0])
+        valid_moons.add(p[0])
+
+    if request.session.get('use_table_view', False):
+        template = 'moon_tracker/system_table.html'
+    else:
+        template = 'moon_tracker/system_list.html'
 
     return render(
         request,
-        'moon_tracker/system_list.html',
+        template,
         context={
-            'valid_moons': moons,
+            'moon_list': Moon.objects.filter(planet__system=system_obj).prefetch_related('moonannotation', 'planet'),
+            'valid_moons': valid_moons,
             'parent': system_obj,
-            'type': 'system'
+            'type': 'system',
+            'mineral_list': [
+                34, 35, 36, 37, 38, 39, 40, 11399, 16634, 16635, 16633, 16636,
+                16640, 16639, 16638, 16637, 16643, 16641, 16644, 16642, 16647,
+                16648, 16646, 16649, 16650, 16651, 16652, 16653
+            ]
         }
     )
 

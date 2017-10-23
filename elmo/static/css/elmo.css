@@ -381,3 +381,7 @@ p.copyright {
 .table >tbody >tr >td {
     vertical-align: middle;
 }
+
+.mineral-table td, .mineral-table th {
+    padding: 5px 1px 5px 1px;
+}

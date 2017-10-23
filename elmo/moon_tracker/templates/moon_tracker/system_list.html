@@ -1,26 +1,5 @@
-{% extends "base.html" %}
+{% extends "moon_tracker/system_page.html" %}
 {% load static %}
-
-{% block title %}{{ parent.name }}{% endblock %}
-
-{% block header %}
-
-<header class="intro-header short {{ type }}">
-  <div class="container">
-    <div class="intro-message">
-      <h2>
-          <a href="{% url 'list_universe' %}">New Eden</a> /
-          <a href="{% url 'list_region' parent.constellation.region.name %}">{{ parent.constellation.region.name }}</a> /
-          <a href="{% url 'list_constellation' parent.constellation.name %}">{{ parent.constellation.name }}</a>
-      </h2>
-      <h1>
-        {{ parent.name }}
-      </h1>
-    </div>
-  </div>
-</header>
-
-{% endblock %}
 
 {% block content %}
 
