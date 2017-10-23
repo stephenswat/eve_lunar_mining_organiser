@@ -3,7 +3,7 @@
 {% load pagination_tools %}
 
 {% block title %}
-{{ user.get_full_name }}
+{{ profile_user.get_full_name }}
 {% endblock %}
 
 {% block header %}
@@ -12,7 +12,7 @@
   <div class="container">
     <div class="intro-message">
       <h1>
-        {{ user.get_full_name }}
+        {{ profile_user.get_full_name }}
       </h1>
     </div>
   </div>
@@ -27,17 +27,17 @@
   <h1>User Info</h1>
   <div class="row">
     <div class="col-sm-6">
-      <img src="https://image.eveonline.com/Character/{{ user.character_id }}_256.jpg" alt="" class="img-rounded img-responsive" />
+      <img src="https://image.eveonline.com/Character/{{ profile_user.character_id }}_256.jpg" alt="" class="img-rounded img-responsive" />
     </div>
     <div class="col-sm-6">
-      <h2>{{ user.get_full_name }}</h2>
+      <h2>{{ profile_user.get_full_name }}</h2>
       <dl>
         <dt>Character ID</dt>
-        <dd>{{ user.character_id }}</dd>
+        <dd>{{ profile_user.character_id }}</dd>
         <dt>Moons scanned</dt>
         <dd>{{ results.paginator.object_list|length }}</dd>
         <dt>Registration date</dt>
-        <dd>{{ user.created|date:"F j, Y" }}</dd>
+        <dd>{{ profile_user.created|date:"F j, Y" }}</dd>
         <dt>Links</dt>
         <dd>
           <a href="https://zkillboard.com/character/{{ user.character_id }}/">zKillboard</a>

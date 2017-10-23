@@ -273,7 +273,7 @@ def profile(request, uid=None):
         request,
         'moon_tracker/profile.html',
         context={
-            'user': user,
+            'profile_user': user,
             'results': results
         }
     )
