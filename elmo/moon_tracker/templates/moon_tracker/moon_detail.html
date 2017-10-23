@@ -46,7 +46,7 @@
 
     {% if can_view %}
       {% for scan in scans %}
-        {% display_scan scan %}
+        {% display_scan scan classes="other" %}
       {% empty%}
         <p class="text-muted">No scan results for this moon were found.</p>
       {% endfor %}
@@ -62,7 +62,7 @@
     <h1>Your Scan Result</h1>
 
     {% if user_scan is not None %}
-      {% display_scan user_scan %}
+      {% display_scan user_scan classes="own" %}
     {% else %}
       <p class="text-muted">You haven't submitted any scans for this moon.</p>
     {% endif %}

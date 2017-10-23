@@ -274,8 +274,12 @@ p.copyright {
     -moz-tab-size: 24;
 }
 
-.result-progress-bar {
+.result-progress-bar.other {
     height: 25px;
+}
+
+.result-progress-bar.own {
+    height: 50px;
 }
 
 .ore-45490, .ore-45491, .ore-45492, .ore-45493 {
@@ -356,9 +360,11 @@ p.copyright {
 
 .result-progress-bar .progress-bar >span {
     display: block;
-    margin-top: 5px;
     text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
     font-size: 14pt;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #id_ore_type {
